@@ -34,11 +34,11 @@ line = do
   return (Place (read rawNum) rawName rawDesc rawExits)
 
 placeString = many (noneOf "\n{}\\")
-listexits = sepBy (try getExits) (char ',')
+listexits = option [NoExit] $ sepBy getExits (char ',')
 
 getExits = do
    skipMany space
-   ddir <- many (noneOf ",:()")
+   ddir <- many (noneOf "[],:()")
    char ':'
    skipMany space
    dnode <- many digit
