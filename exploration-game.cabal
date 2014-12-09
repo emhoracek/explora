@@ -18,7 +18,7 @@ cabal-version:       >=1.10
 executable exploration-game
   main-is:             Main.hs
   other-extensions:    OverloadedStrings
-  build-depends:       base >=4.7 && <4.8,
+  build-depends:       base >=4,
                        containers >=0.5 && <0.6,
                        fgl >= 5.4,
                        parsec >= 3
