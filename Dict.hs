@@ -30,5 +30,5 @@ dictionary p = either (defaultDict . show) dictDirs p
 initDictionary = do
   file <- readFile dictFileName
   let p = parseDictionary file
-  print $ show p
+  -- print $ show p -- for debugging -- I need to learn how to test!!
   return $ dictionary p

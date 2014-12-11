@@ -32,14 +32,17 @@ lineDictionary = do
   mainDirection <- dirString
   char ':'
   skipMany space
-  directions <- listSynonyms
+  directions <- listSynonyms mainDirection
   return $ makeDictionary mainDirection directions 
 
-listSynonyms = option ["??????"] $ sepBy dirString (string ", ")
+-- The list of synonyms is either given by the user with spaces between, or it's-- just the same as the main direction.
+listSynonyms main = option [ main ] $ sepBy dirString (string ", ")
 
+-- Turns the main direction plus synonyms into a list of tuples of 
+-- (user input, directions)
 makeDictionary :: String -> [String] -> [(String, String)]
-makeDictionary word words = 
-     map (\x -> (x, word)) words 
+makeDictionary word = 
+     map (\x -> (x, word)) 
 
 placeString = many (noneOf "\n{}\\")
 dirString = many (noneOf "\n.\\:")
@@ -61,8 +64,4 @@ parseDSL = parse placeFile "(unknown)"
 parseDictionary :: String -> Either ParseError [[(String, String)]]
 parseDictionary = parse dictionaryFile "(unknown)"
 
-dslFileName :: FilePath
 dslFileName = "places.exp"
-
-dictionaryFileName :: FilePath
-dictionaryFileName = "dictionary.exp"
