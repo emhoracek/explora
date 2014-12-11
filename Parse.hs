@@ -11,12 +11,12 @@ import Places
 -- Then I warped it to my own purposes in probably not the best fashion.
 
 placeFile = many1 line
+dictionaryFile = many1 lineDictionary
 
 line = do
   char '{'
   rawNum  <- many digit
-  char '.'
-  char ' '
+  string ". "
   rawName <- placeString
   char '\n'
   skipMany space
@@ -25,13 +25,26 @@ line = do
   skipMany space
   char '['
   rawExits <- listexits
-  char ']'
-  char '}'
-  char '\n'
-  return (Place (read rawNum) rawName rawDesc rawExits)
+  string "]}\n"
+  return $ Place (read rawNum) rawName rawDesc rawExits
+
+lineDictionary = do
+  mainDirection <- dirString
+  char ':'
+  skipMany space
+  directions <- listSynonyms
+  return $ makeDictionary mainDirection directions 
+
+listSynonyms = option ["??????"] $ sepBy dirString (string ", ")
+
+makeDictionary :: String -> [String] -> [(String, String)]
+makeDictionary word words = 
+     map (\x -> (x, word)) words 
 
 placeString = many (noneOf "\n{}\\")
-listexits = option [NoExit] $ sepBy getExits (char ',')
+dirString = many (noneOf "\n.\\:")
+
+listexits = option [NoExit] $ sepBy getExits (string ", ")
 
 getExits = do
    skipMany space
@@ -45,6 +58,11 @@ getExits = do
 parseDSL :: String -> Either ParseError [Place]
 parseDSL = parse placeFile "(unknown)"
 
+parseDictionary :: String -> Either ParseError [[(String, String)]]
+parseDictionary = parse dictionaryFile "(unknown)"
+
 dslFileName :: FilePath
 dslFileName = "places.exp"
 
+dictionaryFileName :: FilePath
+dictionaryFileName = "dictionary.exp"

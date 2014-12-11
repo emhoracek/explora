@@ -1,0 +1,8 @@
+North: n, north
+South: s, south
+East: e, east
+West: w, west
+Down: d, down
+Up: u, up
+xyzzy: xyzzy
+jump: jump
