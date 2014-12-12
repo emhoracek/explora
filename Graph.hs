@@ -35,9 +35,9 @@ tryEdge :: String -> LEdge String -> Node -> Node
 tryEdge exit (_, newNode, label) oldNode | label == exit = newNode
                                          | otherwise     = oldNode
 
-initGraph = do
-    file <- readFile dslFileName
-    let p = parseDSL file
+initGraph file = do
+    f <- readFile file 
+    let p = parsePlaces f
     let makeGraph l = placeGraph (placesToNodes l) (concat $ listAllExits l)
     let pl = either defaultPlaces id p
     let grph = makeGraph pl

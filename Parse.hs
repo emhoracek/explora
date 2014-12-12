@@ -4,16 +4,18 @@ module Parse where
 
 import Data.Maybe (fromMaybe)
 import Text.ParserCombinators.Parsec
-
+import Data.Map (Map, fromList)
 import Places
+import Dictionary
 
 -- I got most of this parsec stuff from Real World Haskell
 -- Then I warped it to my own purposes in probably not the best fashion.
 
-placeFile = many1 line
-dictionaryFile = many1 lineDictionary
+placeFile :: Parser [Place]
+placeFile = many1 placeLine
 
-line = do
+placeLine :: Parser Place
+placeLine = do
   char '{'
   rawNum  <- many digit
   string ". "
@@ -24,44 +26,47 @@ line = do
   char '\n'
   skipMany space
   char '['
-  rawExits <- listexits
+  rawExits <- listOfExits
   string "]}\n"
   return $ Place (read rawNum) rawName rawDesc rawExits
 
-lineDictionary = do
-  mainDirection <- dirString
+dictionaryFile :: Parser [[(String, Direction)]]
+dictionaryFile = many1 dictionaryLine
+
+dictionaryLine :: Parser [(String, Direction)] 
+dictionaryLine = do
+  direction <- directionString
   char ':'
   skipMany space
-  directions <- listSynonyms mainDirection
-  return $ makeDictionary mainDirection directions 
+  synonyms <- listOfSynonyms direction
+  return $ makeDefinitions direction synonyms
 
 -- The list of synonyms is either given by the user with spaces between, or it's-- just the same as the main direction.
-listSynonyms main = option [ main ] $ sepBy dirString (string ", ")
+listOfSynonyms :: Direction -> Parser [String]
+listOfSynonyms main = option [ main ] $ sepBy directionString (string ", ")
 
 -- Turns the main direction plus synonyms into a list of tuples of 
 -- (user input, directions)
-makeDictionary :: String -> [String] -> [(String, String)]
-makeDictionary word = 
-     map (\x -> (x, word)) 
+makeDefinitions :: Direction -> [String] -> [(String, Direction)]
+makeDefinitions direction = map (\word -> (word, direction)) 
 
 placeString = many (noneOf "\n{}\\")
-dirString = many (noneOf "\n.\\:")
+directionString = many (noneOf "\n.\\:")
 
-listexits = option [NoExit] $ sepBy getExits (string ", ")
+listOfExits :: Parser [Exit]
+listOfExits = option [NoExit] $ sepBy getExits (string ", ")
 
+getExits :: Parser Exit
 getExits = do
    skipMany space
    ddir <- many (noneOf "[],:()")
    char ':'
    skipMany space
    dnode <- many digit
-   let dexit = Exit ddir (read dnode)
-   return dexit
+   return $ Exit ddir (read dnode) 
 
-parseDSL :: String -> Either ParseError [Place]
-parseDSL = parse placeFile "(unknown)"
+parsePlaces :: String -> Either ParseError [Place]
+parsePlaces = parse placeFile "(unknown)"
 
-parseDictionary :: String -> Either ParseError [[(String, String)]]
+parseDictionary :: String -> Either ParseError [[(String, Direction)]]
 parseDictionary = parse dictionaryFile "(unknown)"
-
-dslFileName = "places.exp"
