@@ -8,13 +8,7 @@ type Dictionary = Data.Map.Map UserInput Direction
 type UserInput = String
 type Direction = String
 
--- this maps all the things the player should be allowed to type in to the
--- directions on the edges
-createDictionary :: [[(UserInput, Direction)]] -> Dictionary
-createDictionary x =  fromList $ concat x
-
--- this gets a matching edge to look for for each input the play puts in. 
-findDirection :: UserInput -> Dictionary -> UserInput
+findDirection :: UserInput -> Dictionary -> Direction
 findDirection dir = findWithDefault "no match" (map toLower dir)
 
 errorDictionary :: String -> Dictionary 
