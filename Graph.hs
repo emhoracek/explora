@@ -39,6 +39,6 @@ initGraph file = do
     f <- readFile file 
     let p = parsePlaces f
     let makeGraph l = placeGraph (placesToNodes l) (concat $ listAllExits l)
-    let pl = either defaultPlaces id p
+    let pl = either (errorPlaces . show) id p
     let grph = makeGraph pl
     return grph
