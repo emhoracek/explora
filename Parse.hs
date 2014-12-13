@@ -10,9 +10,10 @@ import Dictionary
 
 -- I got most of this parsec stuff from Real World Haskell
 -- Then I warped it to my own purposes in probably not the best fashion.
+-- It looks really ugly. How can I make it better?
 
 placeFile :: Parser [Place]
-placeFile = many1 placeLine
+placeFile = placeLine `sepBy` newline
 
 placeLine :: Parser Place
 placeLine = do
@@ -27,17 +28,16 @@ placeLine = do
   skipMany space
   char '['
   rawExits <- listOfExits
-  string "]}\n"
+  string "]}"
   return $ Place (read rawNum) rawName rawDesc rawExits
 
 dictionaryFile :: Parser [[(String, Direction)]]
-dictionaryFile = many1 dictionaryLine
+dictionaryFile =  dictionaryLine `sepBy` newline 
 
 dictionaryLine :: Parser [(String, Direction)] 
 dictionaryLine = do
   direction <- directionString
-  char ':'
-  skipMany space
+  string ": "
   synonyms <- listOfSynonyms direction
   return $ makeDefinitions direction synonyms
 
