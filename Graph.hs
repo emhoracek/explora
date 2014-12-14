@@ -15,24 +15,25 @@ nodeFromPlace place = (num place, place)
 
 edgesFromPlace :: Place -> [LEdge Direction]
 edgesFromPlace place = map (\x -> (num place, node x, direction x)) (exits place)
+
+createGraph :: [ Place ] -> Gr Place Direction
+createGraph places = mkGraph (map nodeFromPlace places)
+                             (concatMap edgesFromPlace places)
+
+edgesFromNode :: LNode Place -> Gr Place Direction -> [ LEdge Direction ] 
+edgesFromNode (node, _) graph = out graph node
+
+findNodeByDirection :: LNode Place -> Direction -> Gr Place Direction -> LNode Place
+findNodeByDirection place direction graph =
+    find (the one matching direction) (edgesFromNode place graph)
+    where edges 
 {--
--- We want to end up with a list of all the exits for all the places, in edge format
-listAllExits :: [Place] -> [[(Int, Int, String)]]
-listAllExits = map listExits
-
-listExits :: Place -> [(Int, Int, String)]
-listExits x = map ((\ n x -> (n, node x, dir x)) (num x)) (exits x)
-
--- This turns the lists of nodes and list of edges into an inductive graph.
-placeGraph :: [(Int, Place)] -> [(Int, Int, String)] -> Gr Place String
-placeGraph = mkGraph
-
 -- "out" gives a list of edges that go out from a node. This folds a function
 
 -- over the the list that looks at each edge and sees if it is going in the
 -- then that exit's node is the new node. Otherwise, it's the node stays the same.
-tryExits :: String -> Node -> Gr Place String -> Node
-tryExits exit node graph = foldr (tryEdge exit) node $ out graph node
+tryExits :: Direction -> Node -> Gr Place String -> Node
+tryExits direction node graph = foldr (tryEdge exit) node $ out graph node
 
 tryEdge :: String -> LEdge String -> Node -> Node
 tryEdge exit (_, newNode, label) oldNode | label == exit = newNode
