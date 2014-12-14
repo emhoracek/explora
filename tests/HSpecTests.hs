@@ -39,10 +39,11 @@ main = hspec $ do
     
     describe "edgesFromNode" $ do
       it "lists the edges connected to the node" $ do 
-        edgesFromNode (nodeFromPlace $ head samplePlaces) sampleGraph
+        edgesFromNode (fst $ nodeFromPlace $ head samplePlaces) sampleGraph
           `shouldBe` [ (1, 2, "South") ]
 
+    describe "maybeMatchingEdge" $ do
+      it "re
     describe "findNodeByDirection" $ do
-      it "finds the exit matching the direction" $ do
-        findNodeByDirection (nodeFromPlace $ head samplePlaces)  "South" sampleGraph `shouldBe`
-          (nodeFromPlace $ last samplePlaces)
+      it "finds the place matching the exit direction" $ do
+        findNodeByDirection (fst $ nodeFromPlace $ head samplePlaces)  "South" sampleGraph `shouldBe` 2

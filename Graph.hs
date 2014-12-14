@@ -3,7 +3,7 @@ module Graph where
 import Data.Graph.Inductive
 import Data.Char (toLower)
 import Data.Map (Map, fromList, findWithDefault)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, listToMaybe)
 import Text.ParserCombinators.Parsec
 import Data.Set (Set, toList)
 import qualified Data.Set as Set
@@ -21,15 +21,18 @@ createGraph :: [ Place ] -> Gr Place Direction
 createGraph places = mkGraph (map nodeFromPlace places)
                              (concatMap edgesFromPlace places)
 
-edgesFromNode :: LNode Place -> Gr Place Direction -> [ LEdge Direction ] 
-edgesFromNode placeNode graph = out graph (fst placeNode)
+edgesFromNode :: Node -> Gr Place Direction -> [ LEdge Direction ] 
+edgesFromNode node graph = out graph node
 
-testEdge :: LEdge Direction -> Direction -> Bool
-testEdge (_, _, edgeDirection) direction = edgeDirection == direction
+maybeMatchEdge :: Direction -> [LEdge Direction] -> Maybe (LEdge Direction)
+maybeMatchEdge direction edges = 
+  let sameDirection x (_, _, y) = x == y in
+  listToMaybe $ filter (sameDirection direction) edges 
 
-
-findNodeByDirection :: LNode Place -> Direction -> Gr Place Direction -> LNode Place
-findNodeByDirection place direction graph = undefined 
+findNodeByDirection :: Node -> Direction -> Gr Place Direction -> Node
+findNodeByDirection oldNode direction graph = 
+  let newNode (_, x, _) = x in
+  maybe oldNode newNode (maybeMatchEdge direction $ edgesFromNode oldNode graph)
 
 {--
 -- "out" gives a list of edges that go out from a node. This folds a function
