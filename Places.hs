@@ -1,7 +1,7 @@
 module Places where
 
 import Dictionary (Direction)
-import Data.Set (Set)
+import Data.Set (Set, fromList)
 import qualified Data.Set as Set
 
 data Place =  Place { num          :: Int
@@ -13,10 +13,10 @@ instance Show Place where
     show (Place _ name desc _) = name ++ "\n" ++ desc
 
 defaultPlace :: Place
-defaultPlace = Place 1 "A place" "Description of the place." [defaultExit]
+defaultPlace = Place 1 "A place" "Description of the place." (fromList [defaultExit])
 
 data Exit = Exit { direction :: Direction
                  , synonyms  :: Set String
-                 , node      :: Int } deriving (Eq, Show)
+                 , node      :: Int } deriving (Eq, Show, Ord)
 
-defaultExit = Exit "" 1
+defaultExit = Exit "" Set.empty 1

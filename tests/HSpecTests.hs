@@ -3,14 +3,15 @@ module Main where
 import Test.Hspec
 import Test.QuickCheck
 import Data.Graph.Inductive.Graph
-
+import Data.Set (Set, fromList, empty)
+import qualified Data.Set as Set
 import Places
 import Graph
 import Dictionary
 
 samplePlaces :: [ Place ]
-samplePlaces = [ Place 1 "A place" "description" [ Exit "South" 2 ],
-                 Place 2 "A place" "description" [ Exit "North" 1 ] ]
+samplePlaces = [ Place 1 "A place" "description" (Set.fromList [Exit "South" Set.empty 2]) ,
+                 Place 2 "A place" "description" (Set.fromList [Exit "North" Set.empty 1]) ]
 
 sampleGraph = createGraph samplePlaces
 
@@ -35,7 +36,7 @@ main = hspec $ do
     describe "createGraph" $ do
       it "creates a graph from a list of places and directions" $ do
         pendingWith "Dunno how to test this."
-
+    
     describe "edgesFromNode" $ do
       it "lists the edges connected to the node" $ do 
         edgesFromNode (nodeFromPlace $ head samplePlaces) sampleGraph

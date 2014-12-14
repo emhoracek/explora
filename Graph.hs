@@ -5,7 +5,8 @@ import Data.Char (toLower)
 import Data.Map (Map, fromList, findWithDefault)
 import Data.Maybe (fromMaybe)
 import Text.ParserCombinators.Parsec
-
+import Data.Set (Set, toList)
+import qualified Data.Set as Set
 import Parse
 import Places
 import Dictionary (Direction)
@@ -14,19 +15,22 @@ nodeFromPlace :: Place -> LNode Place
 nodeFromPlace place = (num place, place)
 
 edgesFromPlace :: Place -> [LEdge Direction]
-edgesFromPlace place = map (\x -> (num place, node x, direction x)) (exits place)
+edgesFromPlace place = map (\x -> (num place, node x, direction x)) (Set.toList $ exits place)
 
 createGraph :: [ Place ] -> Gr Place Direction
 createGraph places = mkGraph (map nodeFromPlace places)
                              (concatMap edgesFromPlace places)
 
 edgesFromNode :: LNode Place -> Gr Place Direction -> [ LEdge Direction ] 
-edgesFromNode (node, _) graph = out graph node
+edgesFromNode placeNode graph = out graph (fst placeNode)
+
+testEdge :: LEdge Direction -> Direction -> Bool
+testEdge (_, _, edgeDirection) direction = edgeDirection == direction
+
 
 findNodeByDirection :: LNode Place -> Direction -> Gr Place Direction -> LNode Place
-findNodeByDirection place direction graph =
-    find (the one matching direction) (edgesFromNode place graph)
-    where edges 
+findNodeByDirection place direction graph = undefined 
+
 {--
 -- "out" gives a list of edges that go out from a node. This folds a function
 
