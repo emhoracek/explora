@@ -37,13 +37,16 @@ main = hspec $ do
       it "creates a graph from a list of places and directions" $ do
         pendingWith "Dunno how to test this."
     
-    describe "edgesFromNode" $ do
-      it "lists the edges connected to the node" $ do 
-        edgesFromNode (fst $ nodeFromPlace $ head samplePlaces) sampleGraph
-          `shouldBe` [ (1, 2, "South") ]
+    describe "maybeFindNode" $ do
+      it "finds a node by following direction from a list of edges" $ do
+        maybeFindNode "South" (edgesFromNode 1 sampleGraph)
+          `shouldBe` Just 2  
+      it "return Nothing if no matching edge" $ do
+        maybeFindNode "Albequerque" (edgesFromNode 1 sampleGraph)
+          `shouldBe` Nothing
 
-    describe "maybeMatchingEdge" $ do
-      it "re
     describe "findNodeByDirection" $ do
       it "finds the place matching the exit direction" $ do
-        findNodeByDirection (fst $ nodeFromPlace $ head samplePlaces)  "South" sampleGraph `shouldBe` 2
+        findNodeByDirection 1  "South" sampleGraph `shouldBe` 2
+      it "returns the old place if no matching edges" $ do
+        findNodeByDirection 1 "Clockwise" sampleGraph `shouldBe` 1
