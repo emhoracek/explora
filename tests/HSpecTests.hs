@@ -3,15 +3,15 @@ module Main where
 import Test.Hspec
 import Test.QuickCheck
 import Data.Graph.Inductive.Graph
-import Data.Set (Set, fromList, empty)
-import qualified Data.Set as Set
+import Data.Map (Map, fromList)
+import qualified Data.Map as Map
 import Places
 import Graph
 import Dictionary
 
 samplePlaces :: [ Place ]
-samplePlaces = [ Place 1 "A place" "description" (Set.fromList [Exit "South" Set.empty 2]) ,
-                 Place 2 "A place" "description" (Set.fromList [Exit "North" Set.empty 1]) ]
+samplePlaces = [ Place 1 "A place" "description" [Exit "South" ["s"] 2] ,
+                 Place 2 "A place" "description" [Exit "North" ["n"] 1] ]
 
 sampleGraph = createGraph samplePlaces
 
@@ -39,14 +39,23 @@ main = hspec $ do
     
     describe "maybeFindNode" $ do
       it "finds a node by following direction from a list of edges" $ do
-        maybeFindNode "South" (edgesFromNode 1 sampleGraph)
+        maybeFindNode "South" (out sampleGraph 1)
           `shouldBe` Just 2  
       it "return Nothing if no matching edge" $ do
-        maybeFindNode "Albequerque" (edgesFromNode 1 sampleGraph)
+        maybeFindNode "Albequerque" (out sampleGraph 1)
           `shouldBe` Nothing
 
     describe "findNodeByDirection" $ do
       it "finds the place matching the exit direction" $ do
-        findNodeByDirection 1  "South" sampleGraph `shouldBe` 2
+        findNodeByDirection 1  "South" sampleGraph `shouldBe` 
+            Right 2
       it "returns the old place if no matching edges" $ do
-        findNodeByDirection 1 "Clockwise" sampleGraph `shouldBe` 1
+        findNodeByDirection 1 "Clockwise" sampleGraph `shouldBe` 
+            Left "You can't go that way."
+
+    describe "Dictionary" $ do
+        
+        describe "toDictionary" $ do
+            it "converts a list (directions, list of synonyms) to a dictionary" $ do
+                toDictionary [("South", ["s"])] `shouldBe` 
+                    Map.fromList [("s", "South")] 

@@ -33,7 +33,7 @@ maybeFindNode direction edges =
 -- Is there a more Haskell-y way to write this?
 findNodeByDirection :: Node -> Direction -> Gr Place Direction -> 
   Either String Node
-findNodeByDirection oldNode direction graph = 
+findNodeByDirection node direction graph = 
   let maybeNode = maybeFindNode direction $ out graph node in
   case maybeNode of
     Nothing      -> Left "You can't go that way."
