@@ -12,6 +12,8 @@ type Direction = String
 toDictionary :: [ (Direction, [UserInput]) ] -> Dictionary
 toDictionary list = M.fromList $ concatMap toDefinition list
 
+-- this changes the tuple of a canonical direction and a bunch of synonyms
+-- to a key, value pairing of a user input and direction
 toDefinition :: (Direction, [UserInput]) -> [(UserInput, Direction)]
 toDefinition (x, []) = [ (Prelude.map toLower x, x) ]
 toDefinition (x, y:ys) = (y, x) : toDefinition (x, ys)

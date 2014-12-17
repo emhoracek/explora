@@ -15,6 +15,10 @@ samplePlaces = [ Place 1 "A place" "description" [Exit "South" ["s"] 2] ,
 
 sampleGraph = createGraph samplePlaces
 
+sampleMap :: String
+sampleMap = "1. A place \n description \n -> East (e): 3, South (s) 2 \n " ++
+            "2. A place \n description \n -> North (n): 1, East: 4"
+
 main :: IO()
 main = hspec $ do
 
@@ -72,3 +76,9 @@ main = hspec $ do
             it "gives you Nothing if no match" $
                 inputToDirection "apple" (toDictionary [("South", ["s"])])
                     `shouldBe` Nothing
+
+    describe "Parse" $ do
+
+        describe "readFile" $ do
+            it "reads the map" $
+                pending
