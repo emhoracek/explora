@@ -43,10 +43,10 @@ main = hspec $ do
         describe "findNodeByDirection" $ do
             it "finds the place matching the exit direction" $ 
                 findNodeByDirection 1  "South" sampleGraph `shouldBe` 
-                    Right 2
-            it "returns the old place if no matching edges" $ 
+                    Just 2
+            it "gives you nothing if you can't go that way" $ 
                 findNodeByDirection 1 "Clockwise" sampleGraph `shouldBe` 
-                    Left "You can't go that way."
+                    Nothing
 
     describe "Dictionary" $ do
 
@@ -60,4 +60,15 @@ main = hspec $ do
                 toDictionary [("South", ["s"])] `shouldBe` 
                     Map.fromList [("s", "South"), ("south", "South")]
             it "should be empty given an empty list" $ 
-                toDictionary [] `shouldBe` Map.empty 
+                toDictionary [] `shouldBe` Map.empty
+            it "converts a list (directions, list of synonyms) to a dictionary" $ 
+                toDictionary [("South", ["s"]), ("South", [])] `shouldBe` 
+                    Map.fromList [("s", "South"), ("south", "South")]
+                
+        describe "inputToDirection" $ do
+            it "finds Just a direction corresponding to what the user types" $
+                inputToDirection "s" (toDictionary [("South", ["s"])])
+                    `shouldBe` Just "South"
+            it "gives you Nothing if no match" $
+                inputToDirection "apple" (toDictionary [("South", ["s"])])
+                    `shouldBe` Nothing
