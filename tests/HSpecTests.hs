@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+
 module Main where
 
 import Test.Hspec
@@ -8,6 +10,17 @@ import qualified Data.Map as Map
 import Places
 import Graph
 import Dictionary
+import Parse
+
+import Text.ParserCombinators.Parsec.Error(ParseError, Message, errorMessages, messageEq)
+
+-- ParseError isn't an instance of Eq
+instance Eq ParseError where
+   a == b = errorMessages a == errorMessages b
+
+
+sampleExits :: [Exit]
+sampleExits = [ Exit "South" ["s"] 2 ]
 
 samplePlaces :: [ Place ]
 samplePlaces = [ Place 1 "A place" "description" [Exit "South" ["s"] 2] ,
@@ -16,8 +29,14 @@ samplePlaces = [ Place 1 "A place" "description" [Exit "South" ["s"] 2] ,
 sampleGraph = createGraph samplePlaces
 
 sampleMap :: String
-sampleMap = "1. A place \n description \n -> East (e): 3, South (s) 2 \n " ++
-            "2. A place \n description \n -> North (n): 1, East: 4"
+sampleMap = "1. A place \n description \n -> South (s) 2 \n " ++
+            "2. A place \n description \n -> North (n): 1"
+
+sampleMapExits_good :: String
+sampleMapExits_good = "-> South (s): 2"
+
+sampleMapExits_bad :: String
+sampleMapExits_bad = "-> South @#4 f(s): 2"
 
 main :: IO()
 main = hspec $ do
@@ -79,6 +98,10 @@ main = hspec $ do
 
     describe "Parse" $ do
 
-        describe "readFile" $ do
-            it "reads the map" $
-                pending
+        describe "parseExits" $ do
+            it "changes a string to a list of exits" $
+                parseExits sampleMapExits_good `shouldBe`
+                    Right sampleExits
+            {--it "tells you the error if bad input" $ 
+                parseExits sampleMapExits_bad `shouldBe`
+                    Left ParseError "error"--}

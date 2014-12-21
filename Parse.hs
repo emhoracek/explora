@@ -1,12 +1,16 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE NoMonomorphismRestriction #-}
 
 module Parse where
 
 import Data.Maybe (fromMaybe)
 import Text.ParserCombinators.Parsec
+import qualified Text.ParserCombinators.Parsec as P
 import Data.Map (Map, fromList)
 import Places
 import Dictionary
+
+{--
 
 -- I got most of this parsec stuff from Real World Haskell
 -- Then I warped it to my own purposes in probably not the best fashion.
@@ -49,24 +53,43 @@ listOfSynonyms main = option [ main ] $ sepBy directionString (string ", ")
 -- (user input, directions)
 makeDefinitions :: Direction -> [String] -> [(String, Direction)]
 makeDefinitions direction = map (\word -> (word, direction)) 
+ --}
 
-placeString = many (noneOf "\n{}\\")
-directionString = many (noneOf "\n.\\:")
+-- what about multiword synonyms? are those okay?
+validExitString = many (noneOf " ,:()")
 
 listOfExits :: Parser [Exit]
-listOfExits = option [] $ sepBy getExits (string ", ")
+listOfExits = option [] $ sepBy parseExit (string ", ")
 
-getExits :: Parser Exit
-getExits = do
+parseSynonyms :: Parser [String]
+parseSynonyms = do
+    char '('
+    synonyms <- validExitString `sepBy` (string ", ")
+    char ')'
+    return synonyms
+
+parseExit :: Parser Exit
+parseExit = do
    skipMany space
-   ddir <- many (noneOf "[],:()")
+   string "->"
+   skipMany space
+   ddir <- validExitString
+   skipMany space
+   synonyms <- option [] $ parseSynonyms
+   skipMany space
    char ':'
    skipMany space
    dnode <- many digit
-   return $ Exit ddir [] (read dnode) 
+   return $ Exit ddir synonyms (read dnode)
 
+parseExits :: String -> Either ParseError [Exit]
+parseExits x = parse listOfExits "(unknown)" x
+
+{--
 parsePlaces :: String -> Either ParseError [Place]
 parsePlaces = parse placeFile "(unknown)"
 
 parseDictionary :: String -> Either ParseError [[(String, Direction)]]
 parseDictionary = parse dictionaryFile "(unknown)"
+
+--}
