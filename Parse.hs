@@ -55,11 +55,31 @@ makeDefinitions :: Direction -> [String] -> [(String, Direction)]
 makeDefinitions direction = map (\word -> (word, direction)) 
  --}
 
+listOfPlaces :: Parser [Place]
+listOfPlaces = many parsePlace
+
+parsePlace :: Parser Place
+parsePlace = do
+    skipMany space
+    num <- many digit
+    char '.'
+    skipMany space
+    name <- validPlaceString 
+    char '\n'
+    skipMany space
+    desc <- validPlaceString
+    char '\n'
+    exits <- listOfExits
+    skipMany (char '\n')
+    return $ Place (read num) name desc exits
+
+validPlaceString = many (noneOf "\n")
+
 -- what about multiword synonyms? are those okay?
-validExitString = many (noneOf " ,:()")
+validExitString = many (noneOf " ,:()\n")
 
 listOfExits :: Parser [Exit]
-listOfExits = option [] $ sepBy parseExit (string ", ")
+listOfExits = option [] $ parseExit `sepBy` (string ", ")
 
 parseSynonyms :: Parser [String]
 parseSynonyms = do
@@ -83,13 +103,12 @@ parseExit = do
    return $ Exit ddir synonyms (read dnode)
 
 parseExits :: String -> Either ParseError [Exit]
-parseExits x = parse listOfExits "(unknown)" x
+parseExits = parse listOfExits "Exit error: "
+
+parsePlaces :: String -> Either ParseError [Place]
+parsePlaces = parse listOfPlaces "Map error: "
 
 {--
-parsePlaces :: String -> Either ParseError [Place]
-parsePlaces = parse placeFile "(unknown)"
-
 parseDictionary :: String -> Either ParseError [[(String, Direction)]]
-parseDictionary = parse dictionaryFile "(unknown)"
-
+parseDictionary = parse dictionaryFile "Dictionary error: "
 --}

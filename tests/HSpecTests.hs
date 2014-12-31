@@ -12,7 +12,9 @@ import Graph
 import Dictionary
 import Parse
 
-import Text.ParserCombinators.Parsec.Error(ParseError, Message, errorMessages, messageEq)
+import Text.ParserCombinators.Parsec.Error(ParseError(..), Message, newErrorMessage, errorMessages, messageEq)
+
+import Text.Parsec.Pos(SourcePos, initialPos)
 
 -- ParseError isn't an instance of Eq
 instance Eq ParseError where
@@ -29,8 +31,8 @@ samplePlaces = [ Place 1 "A place" "description" [Exit "South" ["s"] 2] ,
 sampleGraph = createGraph samplePlaces
 
 sampleMap :: String
-sampleMap = "1. A place \n description \n -> South (s) 2 \n " ++
-            "2. A place \n description \n -> North (n): 1"
+sampleMap = "1. A place\n description\n -> South (s): 2 \n " ++
+            "2. A place\n description\n -> North (n): 1"
 
 sampleMapExits_good :: String
 sampleMapExits_good = "-> South (s): 2"
@@ -102,6 +104,12 @@ main = hspec $ do
             it "changes a string to a list of exits" $
                 parseExits sampleMapExits_good `shouldBe`
                     Right sampleExits
-            {--it "tells you the error if bad input" $ 
-                parseExits sampleMapExits_bad `shouldBe`
-                    Left ParseError "error"--}
+            it "tells you the error if bad input" $ 
+                pendingWith "Dunno how to test this?"
+
+        describe "parsePlaces" $ do
+            it "changes a string to a list of places" $
+                parsePlaces sampleMap `shouldBe`
+                    Right samplePlaces
+            it "tells you the error if bad input" $
+                pendingWith "Dunno how to test this?"

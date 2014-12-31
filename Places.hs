@@ -8,7 +8,8 @@ data Place =  Place { num          :: Int
                     , exits        :: [Exit]
                       } deriving Eq
 instance Show Place where
-    show (Place _ name desc _) = name ++ "\n" ++ desc
+    show (Place _ name desc exits) = name ++ "\n" ++ desc ++ 
+                                    (show exits)
 
 defaultPlace :: Place
 defaultPlace = Place 1 "A place" "Description of the place." [defaultExit]
