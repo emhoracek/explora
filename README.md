@@ -3,21 +3,6 @@ exploration-game
 
 A text exploration game I made to learn Haskell. Explore a map of places by typing directions. 
 
-useage
-------
-
-### install
-```sh
-git clone https://github.com/emhoracek/exploration-game.git
-cd exploration-game
-cabal sandbox init && cabal install
-```
-
-### play
-```sh
-./dist/build/exploration-game/exploration-game
-```
-
 playing a game
 --------------
 
@@ -28,7 +13,14 @@ making your own map
 
 You can make your own map by making a file named "places.exp". The map file should be formatted exactly like this:
 ```
-{1. Place Name. "Description." [Direction: 1, Another Direction: 2]}
+1. Place Name 
+   Description
+   -> Direction: 1, Another Direction: 2
+2. Another place
+   Description
+   -> Direction: 1
+3. A place with no exits
+   Description
 ```
 
 In other words,
