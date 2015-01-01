@@ -24,13 +24,11 @@ You can make your own map by making a file named "places.exp". The map file shou
 ```
 
 In other words,
-1) Start with a curly brace for each place on the map.
-2) Add a unique number to represent the place.
-3) Type the place name ending with a period. This doesn't have to be unique.
-4) Add a description of the place between quotation marks.
-5) List the exits from the place between brackets. An exit is a direction to go in, a colon and space, and the number of place to which it leads.
-6) Finish with another curly brace.
-7) Start a new line for each place on the map.
+--1) Start with a unique number for the place then a period.
+--2) Type the place name ending with a period.
+--3) On a new line, add a description of the place.
+--4) One the next like, type "->" and a list of the exits from the place, if any. An exit is a direction to go in, a colon and space, and the number of place to which it leads.
+--5) Start a new line for each place on the map.
 
 If you have any questions, email me at libby@daydrea.me or add an issue here!
 
