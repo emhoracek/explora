@@ -9,7 +9,6 @@ import Data.Maybe (fromMaybe, listToMaybe)
 import Text.ParserCombinators.Parsec
 import Parse
 import Places
-import Dictionary (Direction)
 
 nodeFromPlace :: Place -> LNode Place
 nodeFromPlace place = (num place, place)

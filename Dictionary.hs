@@ -4,25 +4,25 @@ import Data.Char (toLower)
 import Text.ParserCombinators.Parsec
 import Data.Map 
 import qualified Data.Map as M
+import Places (Exit(..),Direction(..))
 
 type Dictionary = M.Map UserInput Direction
 type UserInput = String
-type Direction = String
 
-toDictionary :: [ (Direction, [UserInput]) ] -> Dictionary
-toDictionary list = M.fromList $ concatMap toDefinition list
+toDictionary :: [ Exit ] -> Dictionary
+toDictionary list = M.fromList $ concatMap exit2Definitions list
 
 -- this changes the tuple of a canonical direction and a bunch of synonyms
 -- to a key, value pairing of a user input and direction
-toDefinition :: (Direction, [UserInput]) -> [(UserInput, Direction)]
-toDefinition (x, []) = [ (Prelude.map toLower x, x) ]
-toDefinition (x, y:ys) = (y, x) : toDefinition (x, ys)
+exit2Definitions :: Exit -> [(UserInput, Direction)]
+exit2Definitions (Exit dir [] node) = [ (Prelude.map toLower dir, dir) ]
+exit2Definitions (Exit dir (syn:syns) node) = (syn, dir) : exit2Definitions (Exit dir syns node)
 
 inputToDirection :: UserInput -> Dictionary -> Maybe Direction
 inputToDirection = M.lookup
 
 defaultDictionary :: Dictionary 
-defaultDictionary = M.fromList  [("n", "North"),("s", "South"),("e", "East"), ("w", "West"),
+defaultDictionary = M.fromList  [("n", "North"),("s", "S:wouth"),("e", "East"), ("w", "West"),
                       ("north", "North"),("south", "South"),("east", "East"), ("west", "West"),
                       ("d", "Down"), ("down", "Down"), ("u", "Up"), ("up", "Up"),
                       ("xyzzy", "xyzzy"), ("jump", "jump")]
