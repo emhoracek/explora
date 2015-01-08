@@ -12,6 +12,11 @@ import Data.Map (Map)
 dictFile = "dictionary.exp"
 placesFile = "places.exp"
 
+-- idea from Mary on making the World a data type like in Elm
+data World = World { mapGraph :: Graph Place String,
+                     currentPlace :: Node }
+               
+
 -- Initialize the dictionary
 initDictionary file = do
     f <- readFile file
@@ -29,8 +34,8 @@ showError input dir | input == ""    = "Enter a direction, any direction."
                     | dir == "error" = "I don't know what \"" ++ input ++ "\" means."
                     | otherwise      = "You can't go that way."
 
-loop :: Node -> Gr Place String -> Data.Map.Map String String -> IO ()
-loop place grph dict = do
+loop :: World  -> Dictionary -> IO ()
+loop (World graph place) dict = do
     putStrLn "\nWhere do you want to go? \nEnter a direction (e, w, n, s)"
     inputDir <- getLine
     let direction = findDirection inputDir dict
@@ -38,7 +43,7 @@ loop place grph dict = do
     putStrLn $
         if place == newPlace then showError inputDir direction
         else                      showDesc newPlace grph
-    loop newPlace grph dict
+    loop (World graph newPlace) dict
 
 --main :: IO ()
 main = do
