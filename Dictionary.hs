@@ -22,7 +22,7 @@ inputToDirection :: UserInput -> Dictionary -> Maybe Direction
 inputToDirection = M.lookup
 
 defaultDictionary :: Dictionary 
-defaultDictionary = M.fromList  [("n", "North"),("s", "S:wouth"),("e", "East"), ("w", "West"),
+defaultDictionary = M.fromList  [("n", "North"),("s", "South"),("e", "East"), ("w", "West"),
                       ("north", "North"),("south", "South"),("east", "East"), ("west", "West"),
                       ("d", "Down"), ("down", "Down"), ("u", "Up"), ("up", "Up"),
                       ("xyzzy", "xyzzy"), ("jump", "jump")]

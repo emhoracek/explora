@@ -9,6 +9,8 @@ import Places
 import Data.Map (Map)
 import Data.Maybe (isNothing, fromJust)
 
+import Text.ParserCombinators.Parsec (ParseError) 
+
 
 --Locations of dictionary and map (for now)
 dictFile = "dictionary.exp"
@@ -22,6 +24,22 @@ data Game = Game { world :: World,
 data World = World { currentPlace :: Node,
                      mapGraph :: Gr Place String } deriving Show
 
+initZeShit file = do    
+    f <- readFile file
+    let p = parsePlaces f
+    let d = parseDictionary f
+    let init = parseGame p d
+    return init
+
+parseGame ::  Either ParseError [Place] -> Either ParseError Dictionary  
+                -> Either String Game
+parseGame (Right p) (Right d) = let graph = createGraph p in
+                                Right (Game (World (head $ nodes graph) graph) 
+                                        d)
+parseGame (Left a)  (Left b)  = Left (show a ++ " " ++ show b)
+parseGame (Left a)  (Right b) = Left $ show a
+parseGame (Right a) (Left b)  = Left $ show b
+
 -- Initialize the dictionary
 --initDictionary file = do
 --    f <- readFile file
@@ -33,7 +51,9 @@ data World = World { currentPlace :: Node,
 showDesc :: World -> String
 showDesc (World place graph) = description $ lab' $ context graph place
 
-data Response = NoInput
+data Response = BadDictionary
+              | BadPlaceFile
+              | NoInput
               | BadInput String
               | Impossible Direction
               | Okay Node 
@@ -72,25 +92,6 @@ loop game = do
     print $ showDesc newWorld
     loop (Game newWorld (dictionary game))
 
-
-{--
-loop :: World  -> Dictionary -> IO ()
-loop (World graph place) dict = do
-    putStrLn "\nWhere do you want to go? \nEnter a direction (e, w, n, s)"
-    inputDir <- getLine
-    let direction = findDirection inputDir dict
-    let newPlace = tryExits direction place grph
-    putStrLn $
-        if place == newPlace then showError inputDir direction
-        else                      showDesc newPlace grph
-    loop (World graph newPlace) dict
-
---main :: IO ()
 main = do
-    grph <- initGraph placesFile
-    dict <- initDictionary dictFile
-    let startPlace = 1
-    print $ lab' $ context grph startPlace
-    loop startPlace grph dict
-
---}
+    game <- initZeShit placesFile
+    either (print . show) loop game

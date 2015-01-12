@@ -31,7 +31,7 @@ samplePlaces = [ Place 1 "A place" "description" [Exit "South" ["s"] 2] ,
 sampleGraph = createGraph samplePlaces
 
 sampleMap :: String
-sampleMap = "1. A place\n description\n -> South (s): 2 \n " ++
+sampleMap = "1. A place\n description\n -> South (s): 2, West (w): 3 \n " ++
             "2. A place\n description\n -> North (n): 1"
 
 sampleMapExitsGood :: String
