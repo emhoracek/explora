@@ -10,6 +10,7 @@ import Graph
 import Dictionary
 import Parse
 import Text.ParserCombinators.Parsec.Error(ParseError(..), Message, newErrorMessage, errorMessages, messageEq)
+import Main
 
 import Text.Parsec.Pos(SourcePos, initialPos)
 
@@ -18,7 +19,7 @@ instance Eq ParseError where
    a == b = errorMessages a == errorMessages b
 
 sampleDefinitions :: Dictionary 
-sampleDefinitions = Map.fromList [ ("South", "s"), ("North", "n") ]
+sampleDefinitions = Map.fromList [ ("s", "South"), ("n", "North"), ("south", "South"), ("north", "North") ]
 
 sampleExits :: [Exit]
 sampleExits = [ Exit "South" ["s"] 2 ]
@@ -42,3 +43,10 @@ sampleMapExitsDefinition = Map.fromList [ ("s", "South"), ("south", "South") ]
 sampleMapExitsBad :: String
 sampleMapExitsBad = "-> South @#4 f(s): 2"
 
+sampleWorld :: World
+sampleWorld = World { currentPlace = 1,
+                      mapGraph = sampleGraph }
+
+sampleGame :: Game
+sampleGame = Game { world = sampleWorld,
+                    dictionary = sampleDefinitions }

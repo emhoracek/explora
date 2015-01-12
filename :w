@@ -16,11 +16,11 @@ placesFile = "places.exp"
 
 -- because Dictionary never changes
 data Game = Game { world :: World,
-                   dictionary :: Dictionary } deriving Show
+                   dictionary :: Dictionary } deriving (Eq, Show)
 
 -- idea from Mary on making the World a data type like in Elm
 data World = World { currentPlace :: Node,
-                     mapGraph :: Gr Place String } deriving Show 
+                     mapGraph :: Gr Place String }
 
 -- Initialize the dictionary
 --initDictionary file = do
@@ -33,6 +33,12 @@ data World = World { currentPlace :: Node,
 showDesc :: Node -> Gr Place String -> String
 showDesc place graph = description $ lab' $ context graph place
 
+-- Shows why you're in the same place
+--showError :: String -> String -> String
+--showError input dir | input == ""    = "Enter a direction, any direction."
+--                    | dir == "error" = "I don't know what \"" ++ input ++ "\" means."
+--                    | otherwise      = "You can't go that way."
+
 data Response = NoInput
               | BadInput String
               | Impossible Direction
@@ -41,7 +47,7 @@ data Response = NoInput
 instance Show Response where
     show NoInput = "Enter a direction, any direction."
     show (BadInput input) = "I don't know what \"" ++ input ++ "\" means."
-    show (Impossible dir) = "You can't go " ++ dir ++ "."
+    show (Impossible dir) = "You can't do that."
     show Okay = "Okay."
 
 validateInput :: String -> Game -> Response
