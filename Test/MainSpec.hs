@@ -10,13 +10,13 @@ spec :: Spec
 spec = do 
     describe "showDesc" $
        it "gets the desciption of a place on the graph" $
-            showDesc 1 sampleGraph `shouldBe`
+            showDesc (World 1 sampleGraph) `shouldBe`
                  "description"
 
     describe "validateDirection" $ do
         it "says okay if good direction from node" $
             validateDirection "South" sampleGame 
-                `shouldBe` Okay
+                `shouldBe` Okay 2
         it "says impossible if can't go that way" $
             validateDirection "North" sampleGame 
                 `shouldBe` Impossible "North"
@@ -37,21 +37,9 @@ spec = do
         context "good input" $
             it "says okay" $
                 validateInput "south" sampleGame `shouldBe`
-                    Okay
---}            
+                    Okay 2
 
-{--
-    describe "respond" $ do
-        it "decides how to respond to the users input" $
-            response "n" (Just "North") `shouldBe`
-                 "You try going North."
-        it "tell the user if input is invalid" $
-            response "pie" Nothing `shouldBe` 
-                "I don't know what \"pie\" means."
-        it "tells the player if you can't go that way" $
-            response "n" (Just "North") Nothing `shouldBe`
-                "You can't go that way."
-        it "offers instructions to the user if nothing was typed" $
-            response "" Nothing `shouldBe`
-                "Enter a direction, any direction."
---}
+    describe "stepWorld" $ do
+        context "valid direction" $
+            it "steps the world forward to new place" $
+                pendingWith "no Eq instance for Graph"

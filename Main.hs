@@ -20,7 +20,7 @@ data Game = Game { world :: World,
 
 -- idea from Mary on making the World a data type like in Elm
 data World = World { currentPlace :: Node,
-                     mapGraph :: Gr Place String } deriving Show 
+                     mapGraph :: Gr Place String } deriving Show
 
 -- Initialize the dictionary
 --initDictionary file = do
@@ -30,19 +30,19 @@ data World = World { currentPlace :: Node,
 --    return dictionary  
 
 -- Shows description of a new place.
-showDesc :: Node -> Gr Place String -> String
-showDesc place graph = description $ lab' $ context graph place
+showDesc :: World -> String
+showDesc (World place graph) = description $ lab' $ context graph place
 
 data Response = NoInput
               | BadInput String
               | Impossible Direction
-              | Okay 
+              | Okay Node 
               deriving Eq
 instance Show Response where
     show NoInput = "Enter a direction, any direction."
     show (BadInput input) = "I don't know what \"" ++ input ++ "\" means."
     show (Impossible dir) = "You can't go " ++ dir ++ "."
-    show Okay = "Okay."
+    show (Okay n) = "Okay."
 
 validateInput :: String -> Game -> Response
 validateInput "" _ = NoInput
@@ -54,17 +54,23 @@ validateInput input game = case inputToDirection input (dictionary game) of
 validateDirection :: Direction -> Game -> Response
 validateDirection dir game =  case findNodeByDirection 
                        (currentPlace $ world game) dir (mapGraph $ world game) of
-    Just _ -> Okay
+    Just n -> Okay n
     Nothing -> Impossible dir 
 
 
-{--
-step :: World -> Dictionary -> IO (Maybe Node)
-step (World graph place) dict = do 
+stepWorld :: Response -> World -> World
+stepWorld (Okay n)  (World place graph) =
+    World n graph 
+stepWorld _ world = world
+
+loop game = do
+    putStrLn "\n Hello"
     inputDir <- getLine
-    let direction = inputToDirection inputDir dict
-    let newPlace = findNodeByDirection direction place graph
---}
+    let response = validateInput inputDir game
+    print $ show response
+    let newWorld = stepWorld response (world game)
+    print $ showDesc newWorld
+    loop (Game newWorld (dictionary game))
 
 
 {--
