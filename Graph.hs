@@ -2,12 +2,7 @@ module Graph where
 
 import Data.Graph.Inductive
 import Control.Applicative
-import Data.Char (toLower)
 import Data.List (find)
-import Data.Map (Map, fromList, findWithDefault)
-import Data.Maybe (fromMaybe, listToMaybe)
-import Text.ParserCombinators.Parsec
-import Parse
 import Places
 
 nodeFromPlace :: Place -> LNode Place
