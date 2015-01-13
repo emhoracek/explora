@@ -17,16 +17,23 @@ spec =  do
             pendingWith "Dunno how to test this?"
 
     describe "parsePlaces" $ do
-        it "changes a file/string to a list of places" $
-            parsePlaces sampleMap `shouldBe`
-                Right samplePlaces
-        it "tells you the error if bad input" $
-            pendingWith "Dunno how to test this?"
+        context "all places have one exit" $
+            it "changes a file/string to a list of places" $
+                parsePlaces sampleMap `shouldBe`
+                    Right samplePlaces
+        context "mix of exits" $
+            it "changes the file to a list of places" $
+                parsePlaces sampleMap2 `shouldBe`
+                    Right samplePlaces2
 
     describe "parseDictionary" $ do
         it "changes a file/string to a list of definitions" $
-            parseDictionary sampleMapExitsGood `shouldBe`
-                Right sampleMapExitsDefinition
+            parseDictionary sampleMap `shouldBe`
+                Right sampleDefinitions
+        context "mix of exits" $
+            it "still works" $
+                parseDictionary sampleMap2 `shouldBe`
+                    Right sampleMap2Defs
         it "tells you the error if bad input" $
             pendingWith "Dunno how to test."
 

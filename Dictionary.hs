@@ -4,13 +4,13 @@ import Data.Char (toLower)
 import Text.ParserCombinators.Parsec
 import Data.Map 
 import qualified Data.Map as M
-import Places (Exit(..),Direction(..))
+import Places (Exit(..),Direction(..),Place(..))
 
 type Dictionary = M.Map UserInput Direction
 type UserInput = String
 
-toDictionary :: [ Exit ] -> Dictionary
-toDictionary list = M.fromList $ concatMap exit2Definitions list
+toDictionary :: [ Place ] -> Dictionary
+toDictionary list = M.fromList $ concatMap exit2Definitions $ concatMap exits list
 
 -- this changes the tuple of a canonical direction and a bunch of synonyms
 -- to a key, value pairing of a user input and direction

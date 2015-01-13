@@ -11,7 +11,7 @@ spec = do
     describe "showDesc" $
        it "gets the desciption of a place on the graph" $
             showDesc (World 1 sampleGraph) `shouldBe`
-                 "description"
+                 "A place\ndescription"
 
     describe "validateDirection" $ do
         it "says okay if good direction from node" $

@@ -5,6 +5,7 @@ import Dictionary
 import Places
 import Data.Map (Map, fromList)
 import qualified Data.Map as Map
+import Test.Samples
 
 main :: IO()
 main = hspec spec
@@ -17,17 +18,17 @@ spec =  do
                 [("d","Down"),("descend","Down"),("down","Down")]
     
     describe "toDictionary" $ do
-        it "converts a list (directions, list of synonyms) to a dictionary" $ 
-            toDictionary [Exit "South" ["s"] 1] `shouldBe` 
+        it "converts a list of places to a dictionary" $ 
+            toDictionary [Place 1 "" "" [Exit "South" ["s"] 1]] `shouldBe` 
                 Map.fromList [("s", "South"), ("south", "South")]
         it "should be empty given an empty list" $ 
             toDictionary [] `shouldBe` Map.empty
             
     describe "inputToDirection" $ do
         it "finds Just a direction corresponding to what the user types" $
-            inputToDirection "s" (toDictionary [Exit "South" ["s"] 1])
+            inputToDirection "s" sampleDefinitions 
                 `shouldBe` Just "South"
         it "gives you Nothing if no match" $
-            inputToDirection "apple" (toDictionary [Exit "South" ["s"] 1])
+            inputToDirection "apple" sampleDefinitions  
                 `shouldBe` Nothing
 

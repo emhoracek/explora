@@ -40,16 +40,10 @@ parseGame (Left a)  (Left b)  = Left (show a ++ " " ++ show b)
 parseGame (Left a)  (Right b) = Left $ show a
 parseGame (Right a) (Left b)  = Left $ show b
 
--- Initialize the dictionary
---initDictionary file = do
---    f <- readFile file
---    let p = parseDictionary f
---    let dictionary = either (errorDictionary . show) createDictionary p
---    return dictionary  
-
 -- Shows description of a new place.
 showDesc :: World -> String
-showDesc (World place graph) = description $ lab' $ context graph place
+showDesc (World node graph) = name (lab' $ context graph node) ++ "\n" ++ 
+                               description (lab' $ context graph node)
 
 data Response = BadDictionary
               | BadPlaceFile
@@ -77,21 +71,19 @@ validateDirection dir game =  case findNodeByDirection
     Just n -> Okay n
     Nothing -> Impossible dir 
 
-
 stepWorld :: Response -> World -> World
 stepWorld (Okay n)  (World place graph) =
     World n graph 
 stepWorld _ world = world
 
 loop game = do
-    putStrLn "\n Hello"
+    putStrLn $ showDesc $ world game
     inputDir <- getLine
     let response = validateInput inputDir game
-    print $ show response
+    print response
     let newWorld = stepWorld response (world game)
-    print $ showDesc newWorld
     loop (Game newWorld (dictionary game))
 
 main = do
     game <- initZeShit placesFile
-    either (print . show) loop game
+    either print loop game

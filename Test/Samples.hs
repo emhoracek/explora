@@ -31,14 +31,28 @@ samplePlaces = [ Place 1 "A place" "description" [Exit "South" ["s"] 2] ,
 sampleGraph = createGraph samplePlaces
 
 sampleMap :: String
-sampleMap = "1. A place\n description\n -> South (s): 2, West (w): 3 \n " ++
-            "2. A place\n description\n -> North (n): 1"
+sampleMap = "1. A place\n description\n-> South (s): 2\n" ++
+            "2. A place\n description\n-> North (n): 1"
 
-sampleMapExitsGood :: String
+sampleMap2 :: String
+sampleMap2 = "1. A place\n description\n-> South (s): 2\n" ++
+             "2. A pit\n description\n" ++
+             "3. A place\n description\n-> North (n): 1, West (w): 2"
+
+samplePlaces2 :: [ Place ]
+samplePlaces2 = [ Place 1 "A place" "description" [Exit "South" ["s"] 2],
+                  Place 2 "A pit" "description" [],
+                  Place 3 "A place" "description" [Exit "North" ["n"] 1, Exit "West" ["w"] 2]]
+
 sampleMapExitsGood = "-> South (s): 2"
 
-sampleMapExitsDefinition :: Dictionary
-sampleMapExitsDefinition = Map.fromList [ ("s", "South"), ("south", "South") ]
+sampleMap2Defs :: Dictionary 
+sampleMap2Defs = Map.fromList [ ("s", "South"), ("south", "South"),
+                                ("n", "North"), ("north", "North"),
+                                ("w", "West"), ("west", "West") ]
+
+sampleMap2Exits = [ Exit "South" ["s"] 2, Exit "North" ["n"] 1, 
+                    Exit "West" ["w"] 2]
 
 sampleMapExitsBad :: String
 sampleMapExitsBad = "-> South @#4 f(s): 2"

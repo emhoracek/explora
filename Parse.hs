@@ -18,7 +18,6 @@ listOfPlaces = many parsePlace
 
 parsePlace :: Parser Place
 parsePlace = do
-    skipMany space
     num <- many digit
     char '.'
     skipMany space
@@ -37,7 +36,7 @@ validPlaceString = many (noneOf "\n")
 validExitString = many (noneOf " ,:()\n")
 
 listOfExits :: Parser [Exit]
-listOfExits = option [] $ parseExit `sepBy` string ", "
+listOfExits = option [] $ try $ parseExit `sepBy` string ", "
 
 parseSynonyms :: Parser [String]
 parseSynonyms = do
@@ -48,8 +47,7 @@ parseSynonyms = do
 
 parseExit :: Parser Exit
 parseExit = do
-   skipMany space
-   string "->"
+   optional $ string "->"
    skipMany space
    ddir <- validExitString
    skipMany space
@@ -67,6 +65,6 @@ parsePlaces :: String -> Either ParseError [Place]
 parsePlaces = parse listOfPlaces "Map error: "
 
 parseDictionary :: String -> Either ParseError Dictionary
-parseDictionary file = case parseExits file of 
+parseDictionary file = case parsePlaces file of 
     Left x -> Left x
     Right x -> Right $ toDictionary x
