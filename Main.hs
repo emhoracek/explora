@@ -6,14 +6,11 @@ import Parse
 import Dictionary
 import Graph
 import Places
-import Data.Map (Map)
-import Data.Maybe (isNothing, fromJust)
 
 import Text.ParserCombinators.Parsec (ParseError) 
 
-
 --Locations of dictionary and map (for now)
-dictFile = "dictionary.exp"
+placesFile :: String
 placesFile = "places.exp"
 
 -- because Dictionary never changes
@@ -24,30 +21,30 @@ data Game = Game { world :: World,
 data World = World { currentPlace :: Node,
                      mapGraph :: Gr Place String } deriving Show
 
-initZeShit file = do    
-    f <- readFile file
-    let p = parsePlaces f
-    let d = parseDictionary f
-    let init = parseGame p d
-    return init
+initGame :: String -> Either String Game
+initGame file =    
+    let p = parsePlaces file
+        d = parseDictionary file in
+    parseGame p d
 
-parseGame ::  Either ParseError [Place] -> Either ParseError Dictionary  
-                -> Either String Game
-parseGame (Right p) (Right d) = let graph = createGraph p in
-                                Right (Game (World (head $ nodes graph) graph) 
-                                        d)
-parseGame (Left a)  (Left b)  = Left (show a ++ " " ++ show b)
-parseGame (Left a)  (Right b) = Left $ show a
-parseGame (Right a) (Left b)  = Left $ show b
+-- is this the best way to "add" these functions?
+parseGame :: Either ParseError [Place] -> Either ParseError Dictionary ->
+                Either String Game
+parseGame (Right p) (Right d) = Right $ makeGame p d
+parseGame (Right p) (Left  d) = Left $ show d
+parseGame (Left  p)  _        = Left $ show p
+
+-- Games start at the first node listed in the graph.
+makeGame :: [Place] -> Dictionary -> Game
+makeGame p d = let graph = createGraph p in
+               Game (World (head $ nodes graph) graph) d
 
 -- Shows description of a new place.
 showDesc :: World -> String
 showDesc (World node graph) = name (lab' $ context graph node) ++ "\n" ++ 
                                description (lab' $ context graph node)
 
-data Response = BadDictionary
-              | BadPlaceFile
-              | NoInput
+data Response = NoInput
               | BadInput String
               | Impossible Direction
               | Okay Node 
@@ -56,26 +53,27 @@ instance Show Response where
     show NoInput = "Enter a direction, any direction."
     show (BadInput input) = "I don't know what \"" ++ input ++ "\" means."
     show (Impossible dir) = "You can't go " ++ dir ++ "."
-    show (Okay n) = "Okay."
+    show (Okay _) = "Okay."
 
 validateInput :: String -> Game -> Response
 validateInput "" _ = NoInput
-validateInput input game = case inputToDirection input (dictionary game) of 
-    Just n -> validateDirection n game
-    Nothing -> BadInput input
-
+validateInput input game = 
+    case inputToDirection input (dictionary game) of 
+        Just n -> validateDirection n game
+        Nothing -> BadInput input
 
 validateDirection :: Direction -> Game -> Response
-validateDirection dir game =  case findNodeByDirection 
-                       (currentPlace $ world game) dir (mapGraph $ world game) of
-    Just n -> Okay n
-    Nothing -> Impossible dir 
+validateDirection dir game = 
+    case findNodeByDirection 
+            (currentPlace $ world game) dir (mapGraph $ world game) of
+        Just n -> Okay n
+        Nothing -> Impossible dir 
 
 stepWorld :: Response -> World -> World
-stepWorld (Okay n)  (World place graph) =
-    World n graph 
+stepWorld (Okay n) (World _ graph) = World n graph 
 stepWorld _ world = world
 
+loop :: Game -> IO ()
 loop game = do
     putStrLn $ showDesc $ world game
     inputDir <- getLine
@@ -84,6 +82,8 @@ loop game = do
     let newWorld = stepWorld response (world game)
     loop (Game newWorld (dictionary game))
 
+main :: IO ()
 main = do
-    game <- initZeShit placesFile
+    f <- readFile placesFile
+    let game = initGame f
     either print loop game
