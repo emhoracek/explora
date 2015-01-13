@@ -6,8 +6,9 @@ data Place =  Place { num          :: Int
                     , exits        :: [Exit]
                       } deriving Eq
 instance Show Place where
-    show (Place _ name desc exits) = name ++ "\n" ++ desc ++ "\n" ++ 
-                                     show exits
+    show place = name place ++ "\n" ++ 
+                 description place ++ "\n" ++ 
+                 show (exits place)
 
 defaultPlace :: Place
 defaultPlace = Place 1 "A place" "Description of the place." [defaultExit]
@@ -18,5 +19,9 @@ data Exit = Exit { direction :: Direction
                  , synonyms  :: [ String ]
                  , node      :: Int } deriving (Eq, Ord)
 instance Show Exit where
-   show (Exit dir syn node) = dir ++ ": " ++ show syn ++ " " ++ show node
+   show exit = direction exit ++ ": " ++ 
+               show (synonyms exit) ++ " " ++ 
+               show (node exit)
+
+defaultExit :: Exit
 defaultExit = Exit "" [] 1
