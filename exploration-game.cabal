@@ -23,7 +23,7 @@ test-suite tests
    ghc-options:         -Wall
    default-extensions:  OverloadedStrings
    type:                exitcode-stdio-1.0
-   main-is:             tests/HSpecTests.hs
+   main-is:             Test/Spec.hs
    build-depends:       base,
                         fgl, parsec,
                         QuickCheck,
