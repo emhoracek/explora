@@ -1,12 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
+{-# OPTIONS_GHC -fno-warn-unused-do-bind #-}
 
 module Parse where
 
-import Data.Maybe (fromMaybe)
 import Text.ParserCombinators.Parsec
-import qualified Text.ParserCombinators.Parsec as P
-import Data.Map (Map, fromList)
 import Places
 import Dictionary
 
@@ -30,9 +28,11 @@ parsePlace = do
     skipMany (char '\n')
     return $ Place (read num) name desc exits
 
+validPlaceString :: Parser String
 validPlaceString = many (noneOf "\n")
 
 -- what about multiword synonyms? are those okay?
+validExitString :: Parser String
 validExitString = many (noneOf " ,:()\n")
 
 listOfExits :: Parser [Exit]
