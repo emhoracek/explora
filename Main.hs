@@ -1,7 +1,6 @@
 module Main where
 
-import Data.Graph.Inductive
-
+import DIYGraph
 import Parse
 import Dictionary
 import Graph
@@ -18,8 +17,8 @@ data Game = Game { world :: World,
                    dictionary :: Dictionary } deriving Show
 
 -- idea from Mary on making the World a data type like in Elm
-data World = World { currentPlace :: Node,
-                     mapGraph :: Gr Place String } deriving Show
+data World = World { currentPlace :: NodeID,
+                     mapGraph :: Graph Place String } deriving Show
 
 initGame :: String -> Either String Game
 initGame file =    
@@ -41,13 +40,13 @@ makeGame p d = let graph = createGraph p in
 
 -- Shows description of a new place.
 showDesc :: World -> String
-showDesc (World node graph) = name (lab' $ context graph node) ++ "\n" ++ 
-                               description (lab' $ context graph node)
+showDesc (World node graph) = name (label graph node) ++ "\n" ++ 
+                               description (label graph node)
 
 data Response = NoInput
               | BadInput String
               | Impossible Direction
-              | Okay Node 
+              | Okay NodeID
               deriving Eq
 instance Show Response where
     show NoInput = "Enter a direction, any direction."

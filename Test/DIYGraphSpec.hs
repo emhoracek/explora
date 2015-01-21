@@ -21,7 +21,13 @@ sampleGraph2 = ([], (1, "hello"), []) :&: EmptyGraph
 sampleGraphInt :: Graph String Int
 sampleGraphInt = ([(2, 1)], (1, "hello"), [(3, 1)]) :&: EmptyGraph 
 
-main = hspec $ do
+longerGraph :: Graph String String
+longerGraph = ([("mother", 2)], (1, "Marilyn"), [("mother of",2)]) :&:
+              (([("daughter", 1)], (2, "Libby"), [("daughter of",1)]) :&: EmptyGraph)
+
+main = hspec spec
+
+spec =  do
     describe "fmap" $ do
         it "satisfies law 1" $
             fmap id sampleGraph `shouldBe` sampleGraph
@@ -89,3 +95,9 @@ main = hspec $ do
                       [(1, 2, "exit")] `shouldBe`
             (([], (1, "hello"), [("exit", 2)]) :&:
              (([("exit", 1)], (2, "goodbye"), []) :&: EmptyGraph))
+
+    describe "linksToEdge" $
+        it "turns a list of links to a list of edges" $
+            linksToEdges 1 longerGraph `shouldBe`
+                [(1, 2, "mother of")]
+ 

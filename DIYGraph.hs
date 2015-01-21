@@ -68,5 +68,26 @@ addEdgeToContext (n1, n2, label) (linksA, node, linksB)
 fromLists :: [Node a] -> [Edge b] -> Graph a b
 fromLists  nodes [] = insertNodes nodes EmptyGraph
 fromLists nodes edges = insertEdges edges $ insertNodes nodes EmptyGraph
---fromLists (node@(id, _):xs) (edge@(n1, n2, _):ys) = 
 
+nodeToContext :: NodeID -> Graph a b -> Context a b
+nodeToContext node (context@(_, n,_) :&: graph) 
+    | node == fst n = context
+    | otherwise     = nodeToContext node graph
+
+outLinks :: Context a b-> Links b
+outLinks (_, _, x) = x
+
+linksToEdges :: NodeID -> Graph a b -> [Edge b]
+linksToEdges n graph = map (\(label, node) -> (n, node, label)) 
+                        (outLinks $ nodeToContext n graph)
+
+out :: Graph a b -> NodeID -> [Edge b]
+out graph n = linksToEdges n graph
+
+nodes :: Graph a b -> [NodeID]
+nodes ((_, (id, _),_) :&: graph) = id : nodes graph
+
+label :: Graph a b -> NodeID -> a
+label graph n = label context
+    where context = nodeToContext n graph
+          label (_, (_, x),_) = x 

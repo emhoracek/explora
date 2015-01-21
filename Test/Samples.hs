@@ -2,7 +2,6 @@ module Test.Samples where
 
 import Test.Hspec
 import Test.QuickCheck
-import Data.Graph.Inductive.Graph
 import Data.Map (Map, fromList)
 import qualified Data.Map as Map
 import Places
