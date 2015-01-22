@@ -1,0 +1,6 @@
+1. A room
+    A small room with a closet.
+-> South (s, enter): 2
+2. A closet
+    You are in a closet.
+-> North (n, exit, leave): 1
