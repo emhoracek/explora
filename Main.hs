@@ -7,8 +7,9 @@ import Graph
 import Places
 
 import Text.ParserCombinators.Parsec (ParseError) 
+import System.Environment 
 
---Locations of dictionary and map (for now)
+--Location of game file (for now)
 placesFile :: String
 placesFile = "places.exp"
 
@@ -83,6 +84,7 @@ loop game = do
 
 main :: IO ()
 main = do
-    f <- readFile placesFile
+    [file] <- getArgs
+    f <- readFile file
     let game = initGame f
     either print loop game
