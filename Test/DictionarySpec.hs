@@ -19,7 +19,7 @@ spec =  do
     
     describe "toDictionary" $ do
         it "converts a list of places to a dictionary" $ 
-            toDictionary [Place 1 "" "" [Exit "South" ["s"] 1]] `shouldBe` 
+            toDictionary [Place 1 "" "" [] [Exit "South" ["s"] 1]] `shouldBe` 
                 Map.fromList [("s", "South"), ("south", "South")]
         it "should be empty given an empty list" $ 
             toDictionary [] `shouldBe` Map.empty

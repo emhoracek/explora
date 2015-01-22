@@ -26,7 +26,7 @@ parsePlace = do
     char '\n'
     exits <- listOfExits
     skipMany (char '\n')
-    return $ Place (read num) name desc exits
+    return $ Place (read num) name desc [] exits
 
 validPlaceString :: Parser String
 validPlaceString = many (noneOf "\n")
