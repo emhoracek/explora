@@ -6,6 +6,7 @@ import Data.Map (Map, fromList)
 import qualified Data.Map as Map
 import Places
 import Graph
+import DIYGraph
 import Dictionary
 import Parse
 import Text.ParserCombinators.Parsec.Error(ParseError(..), Message, newErrorMessage, errorMessages, messageEq)
@@ -27,7 +28,8 @@ samplePlaces :: [ Place ]
 samplePlaces = [ Place 1 "A place" "description" [Exit "South" ["s"] 2] ,
                  Place 2 "A place" "description" [Exit "North" ["n"] 1] ]
 
-sampleGraph = createGraph samplePlaces
+sampleGraph = ( [("North", 2)], (1, head samplePlaces), [("South", 2)]) :&:
+              (([("South", 1)], (2, last samplePlaces), [("North", 1)]) :&: EmptyGraph)
 
 sampleMap :: String
 sampleMap = "1. A place\n description\n-> South (s): 2\n" ++

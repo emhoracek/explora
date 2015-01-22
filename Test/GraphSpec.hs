@@ -21,7 +21,7 @@ spec =  do
 
     describe "createGraph" $ 
         it "creates a graph from a list of places and directions" $ 
-            pendingWith "Dunno how to test this."   
+            createGraph samplePlaces `shouldBe` sampleGraph  
    
     describe "maybeFindNode" $ do
         it "finds a node by following direction from a list of edges" $

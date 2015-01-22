@@ -27,7 +27,10 @@ initGame file =
         d = parseDictionary file in
     parseGame p d
 
--- is this the best way to "add" these functions?
+-- is this the best way to "add" these Eithers?
+-- If both are Right, make the game. If the place file was file, but the
+-- dictionary wasn't, show the error for the dictionary. Otherwise, show 
+-- the error for the dictionary.
 parseGame :: Either ParseError [Place] -> Either ParseError Dictionary ->
                 Either String Game
 parseGame (Right p) (Right d) = Right $ makeGame p d
@@ -42,8 +45,9 @@ makeGame p d = let graph = createGraph p in
 -- Shows description of a new place.
 showDesc :: World -> String
 showDesc (World node graph) = name (label graph node) ++ "\n" ++ 
-                               description (label graph node)
+                              description (label graph node)
 
+-- These are all the responses the player can get for their input.
 data Response = NoInput
               | BadInput String
               | Impossible Direction
@@ -55,6 +59,7 @@ instance Show Response where
     show (Impossible dir) = "You can't go " ++ dir ++ "."
     show (Okay _) = "Okay."
 
+-- Checks whether input is in dictionary.
 validateInput :: String -> Game -> Response
 validateInput "" _ = NoInput
 validateInput input game = 
@@ -62,6 +67,7 @@ validateInput input game =
         Just n -> validateDirection n game
         Nothing -> BadInput input
 
+-- Checks if the inputed direction is possible.
 validateDirection :: Direction -> Game -> Response
 validateDirection dir game = 
     case findNodeByDirection 
@@ -69,10 +75,13 @@ validateDirection dir game =
         Just n -> Okay n
         Nothing -> Impossible dir 
 
+-- If the response is "Okay", change the world, otherwise it says the same.
 stepWorld :: Response -> World -> World
 stepWorld (Okay n) (World _ graph) = World n graph 
 stepWorld _ world = world
 
+-- Game loop. Show description of current state, get input from player,
+-- determine correct response and display, step world if possible, and loop.
 loop :: Game -> IO ()
 loop game = do
     putStrLn $ showDesc $ world game
@@ -82,6 +91,8 @@ loop game = do
     let newWorld = stepWorld response (world game)
     loop (Game newWorld (dictionary game))
 
+-- Get file from arguments (need to create function to check file!). Either
+-- initialize the loop or print the error. 
 main :: IO ()
 main = do
     [file] <- getArgs
