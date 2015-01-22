@@ -5,4 +5,5 @@ data Object = Object { objName :: String,
 
 type Inventory = [ Object ]
 
-
+playerInventory = [ Object "flashlight" "a shiny black Maglite flashlight",
+                    Object "piece of paper" "it says \"welcome to the game\"" ]

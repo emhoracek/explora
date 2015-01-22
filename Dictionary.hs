@@ -22,3 +22,5 @@ exit2Definitions (Exit dir (syn:syns) n) =
 inputToDirection :: UserInput -> Dictionary -> Maybe Direction
 inputToDirection = Data.Map.lookup
 
+defaultDirections :: [(UserInput, Direction)]
+defaultDirections = [ ("look", "look"), ("x", "look"), ("examine", "look") ]
