@@ -35,9 +35,12 @@ spec = do
                 validateInput "north" sampleGame `shouldBe`
                     Impossible "North"
         context "good input" $
-            it "says okay" $
+            it "says okay for a direction" $
                 validateInput "south" sampleGame `shouldBe`
-                    Okay 2
+                    Okay (go 2)
+            it "says okay for \"go\" and a direction" $
+                validateInput "go south" sampleGame `shouldBe`
+                    Okay (go 2)
 
     describe "stepWorld" $ do
         context "valid direction" $

@@ -5,6 +5,7 @@ import Parse
 import Dictionary
 import Graph
 import Places
+import World
 
 import Text.ParserCombinators.Parsec (ParseError) 
 import System.Environment 
@@ -16,10 +17,6 @@ placesFile = "places.exp"
 -- because Dictionary never changes
 data Game = Game { world :: World,
                    dictionary :: Dictionary } deriving Show
-
--- idea from Mary on making the World a data type like in Elm
-data World = World { currentPlace :: NodeID,
-                     mapGraph :: Graph Place String } deriving Show
 
 initGame :: String -> Either String Game
 initGame file =    
@@ -47,11 +44,14 @@ showDesc :: World -> String
 showDesc (World node graph) = name (label graph node) ++ "\n" ++ 
                               description (label graph node)
 
+type Action a = (a -> World) a
+
 -- These are all the responses the player can get for their input.
+-- "Okay Action" means it's okay to take that action.
 data Response = NoInput
               | BadInput String
               | Impossible Direction
-              | Okay NodeID
+              | Okay Action
               deriving Eq
 instance Show Response where
     show NoInput = "Enter a direction, any direction."
@@ -75,11 +75,6 @@ validateDirection dir game =
         Just n -> Okay n
         Nothing -> Impossible dir 
 
--- If the response is "Okay", change the world, otherwise it says the same.
-stepWorld :: Response -> World -> World
-stepWorld (Okay n) (World _ graph) = World n graph 
-stepWorld _ world = world
-
 -- Game loop. Show description of current state, get input from player,
 -- determine correct response and display, step world if possible, and loop.
 loop :: Game -> IO ()
@@ -90,6 +85,11 @@ loop game = do
     print response
     let newWorld = stepWorld response (world game)
     loop (Game newWorld (dictionary game))
+
+-- If the response is "Okay", change the world, otherwise it says the same.
+stepWorld :: Response -> World -> World
+stepWorld (Okay n) (World _ graph) = fmap n world 
+stepWorld _ world = world
 
 -- Get file from arguments (need to create function to check file!). Either
 -- initialize the loop or print the error. 

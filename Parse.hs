@@ -68,3 +68,4 @@ parseDictionary :: String -> Either ParseError Dictionary
 parseDictionary file = case parsePlaces file of 
     Left x -> Left x
     Right x -> Right $ toDictionary x
+
