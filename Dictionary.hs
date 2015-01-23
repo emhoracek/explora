@@ -9,7 +9,7 @@ type UserInput = String
 
 toDictionary :: [ Place ] -> Dictionary
 toDictionary list = Data.Map.fromList $ 
-                    concatMap exit2Definitions $ concatMap exits list
+                    concatMap exitToDefinitions $ concatMap exits list
 
 -- this changes the tuple of a canonical direction and a bunch of synonyms
 -- to a key, value pairing of a user input and direction
