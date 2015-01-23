@@ -11,6 +11,8 @@ import Dictionary
 import Parse
 import Text.ParserCombinators.Parsec.Error(ParseError(..), Message, newErrorMessage, errorMessages, messageEq)
 import Main
+import World
+import Inventory
 
 import Text.Parsec.Pos(SourcePos, initialPos)
 

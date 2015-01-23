@@ -57,14 +57,15 @@ instance Show Response where
     show (Impossible dir) = "You can't go " ++ dir ++ "."
     show (Okay action) = "Okay."
     
-
 newtype Action = Action { action :: World -> World }
 instance Eq Action where
     (==) x y = True
 
-
 go :: NodeID -> World -> World  
 go n (World _ graph) = World n graph
+
+look :: World -> World
+look world = world 
 
 -- Checks whether input is in dictionary.
 validateInput :: String -> Game -> Response 

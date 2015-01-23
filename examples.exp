@@ -1,0 +1,49 @@
+1. A Cave
+   You are inside a deep, dark cave. The cave continues to the east. South is the exit.
+-> East (e): 3, South (s): 2, xyzzy: 8
+2. The Woods
+    You are in a green wood outside a cave. You can enter the cave by going north. To the east you can see a house.
+-> North (n): 1, East: 4
+3. Darkness
+    It is pitch black. You are likely to be eaten by a grue. (Not really.)
+-> Down (d): 7, West (w): 1
+4. A House
+    You are outside a small, quaint cottage in the woods. It's not your house, it's locked, and you can't get in. The woods continue to the east and west, and a road leads south.
+-> West: 2, East: 6, South: 5, North: 16
+5. A Dead End
+    The road is a dead end in the middle of the woods. Kind of creepy. Wow. North is a house.
+-> North: 4
+6. Spaceship in the Woods
+    A huge alien spaceship has crash-landed, creating a crater in a clearing. A house lies to the west.
+-> West: 4, North: 10
+7. Deep Cavern
+    You have ventured into a huge cavern dimly lit by magical glowing moss!
+-> Up: 3, West: 9
+8. Unicorn Pool
+    Ancient dark oaks surround the small clearing. Mossy rocks circle a pond brimming with glittering goldfish. A magnificent pink unicorn gazes placidly upon you from atop a throne of pure white lilies.
+9. Underground Spring
+    Water bubbles up from deep below the earth's surface. A narrow passage leads back to the larger cavern.
+-> East: 7
+10. Crumbling Grave
+     A lone cracked and weathered gravestone pokes out from the undergrowth. You can't read the inscription. You can see more of them further north.
+-> South: 6, North: 11
+11. Forgotten Cemetary
+     Long ago, all the rich people in town were buried on this hill. Now their mausoleums and monuments are broken or vandalized. A road runs east/west or the cemetary continues to the south.
+-> North: 12, South: 10
+12. Closed Road
+     The road going down to the city is closed. The Castle is visible to the north, a cemetary lies to the south, and the road continues to the West.
+-> North: 13, South: 11, West: 15
+13. The Castle (upper)
+     The unfinished concrete structure built into the side of the hill looks a little like a fort or castle. Stone steps spiral down to the lower floor.
+-> South: 12, Down: 14
+14. The Castle (lower)
+     Graffiti covers every surface. Openings in the wall look out on the city below. Stairs lead back up to the top.
+-> Up: 13
+15. McColloch's Leap
+     You can go south down the hill, head east on the road, or try your luck jumping off the cliff to the North, just like McColloch.
+-> Jump: 17, North: 17, South: 16, East: 12
+16. The Park
+     The cracked surface and ripped nets of the tennis court don't invite play, but the baseball field is in good condition. The nearby road runs north/south up the hill.
+-> North: 15, South: 4
+17. The Afterlife
+     You leap of the cliff and land... not on hard ground, but soft fluffy clouds. Angels sing and play harps and frolic as the flit to and fro. You shrug and join them.

@@ -3,6 +3,7 @@ module Test.MainSpec (spec) where
 import Test.Hspec
 import Test.Samples
 import Main
+import World
 
 main = hspec spec
 
@@ -16,14 +17,14 @@ spec = do
     describe "validateDirection" $ do
         it "says okay if good direction from node" $
             validateDirection "South" sampleGame 
-                `shouldBe` Okay 2
+                `shouldBe` Okay (Action (go 2))
         it "says impossible if can't go that way" $
             validateDirection "North" sampleGame 
                 `shouldBe` Impossible "North"
 
     describe "validateInput" $ do
         context "no input" $
-            it "tells the player what to do" $
+            it "gives player instructions" $
                 validateInput "" sampleGame `shouldBe`
                     NoInput 
         context "input that's not in the dictionary" $
@@ -34,13 +35,13 @@ spec = do
             it "tells the user they can't do that" $
                 validateInput "north" sampleGame `shouldBe`
                     Impossible "North"
-        context "good input" $
+        context "good input" $ do
             it "says okay for a direction" $
                 validateInput "south" sampleGame `shouldBe`
-                    Okay (go 2)
+                    Okay (Action (go 2))
             it "says okay for \"go\" and a direction" $
                 validateInput "go south" sampleGame `shouldBe`
-                    Okay (go 2)
+                    Okay (Action (go 2))
 
     describe "stepWorld" $ do
         context "valid direction" $
