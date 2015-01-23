@@ -44,8 +44,6 @@ showDesc :: World -> String
 showDesc (World node graph) = name (label graph node) ++ "\n" ++ 
                               description (label graph node)
 
-type Action a = (a -> World) a
-
 -- These are all the responses the player can get for their input.
 -- "Okay Action" means it's okay to take that action.
 data Response = NoInput
@@ -57,10 +55,19 @@ instance Show Response where
     show NoInput = "Enter a direction, any direction."
     show (BadInput input) = "I don't know what \"" ++ input ++ "\" means."
     show (Impossible dir) = "You can't go " ++ dir ++ "."
-    show (Okay _) = "Okay."
+    show (Okay action) = "Okay."
+    
+
+newtype Action = Action { action :: World -> World }
+instance Eq Action where
+    (==) x y = True
+
+
+go :: NodeID -> World -> World  
+go n (World _ graph) = World n graph
 
 -- Checks whether input is in dictionary.
-validateInput :: String -> Game -> Response
+validateInput :: String -> Game -> Response 
 validateInput "" _ = NoInput
 validateInput input game = 
     case inputToDirection input (dictionary game) of 
@@ -72,7 +79,7 @@ validateDirection :: Direction -> Game -> Response
 validateDirection dir game = 
     case findNodeByDirection 
             (currentPlace $ world game) dir (mapGraph $ world game) of
-        Just n -> Okay n
+        Just n  -> Okay $ Action (go n)
         Nothing -> Impossible dir 
 
 -- Game loop. Show description of current state, get input from player,
@@ -88,7 +95,7 @@ loop game = do
 
 -- If the response is "Okay", change the world, otherwise it says the same.
 stepWorld :: Response -> World -> World
-stepWorld (Okay n) (World _ graph) = fmap n world 
+stepWorld (Okay (Action change)) world = change world
 stepWorld _ world = world
 
 -- Get file from arguments (need to create function to check file!). Either
