@@ -6,26 +6,25 @@ A text exploration game engine I made to learn Haskell. Explore a map of places 
 installing the engine
 ---------------------
 
-Right now, you need the Haskell platform installed on your computer to use this engine. Eventually, I would like to make it useable online. Once you have Haskell installed, install the game with:
+Right now, you need the Haskell platform installed on your computer to use this engine. (Eventually, I would like to make it useable online.) Once you have Haskell installed, install the game with:
 
 ```(sh)
 clone https://www.github.com/emhoracek/explora 
 cd explora
-cabal sandbox init
 cabal install
 ```
 
 playing a game
 --------------
 
-After installing, `explora example.exp` inside the game folder will open the example game.
+After installing, starting `explora` inside the explora folder then pressing enter will open the example game. 
 
 Type directions or instructions like "south", "east", "north" or "west" to explore the map. There are also secret commands (try "xyzzy"!). 
 
 making your own map
 -------------------
 
-You can make your own map by making a file named "places.exp". The map file should be formatted exactly like this:
+You can make your own map to explore and share with friends! The map file should be formatted exactly like this:
 ```
 1. Place Name 
    Description
@@ -49,6 +48,6 @@ If you have any questions, email me at libby@daydrea.me or add an issue here!
 contributing
 ------------
 
-I would very much appreciate contributions of any sort. Pull requests are very welcome, especially from other beginners. 
+I would very much appreciate contributions of any sort! 
 
 As a beginner eager to learn more about Haskell, I would also appreciate constructive criticism about how to make my program better.

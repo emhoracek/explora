@@ -14,7 +14,7 @@ spec :: Spec
 spec =  do
     describe "toDefinition" $ 
         it "converts an exit to a definition" $
-            exit2Definitions (Exit "Down" ["d", "descend"] 2) `shouldBe`
+            exitToDefinitions (Exit "Down" ["d", "descend"] 2) `shouldBe`
                 [("d","Down"),("descend","Down"),("down","Down")]
     
     describe "toDictionary" $ do

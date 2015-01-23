@@ -10,11 +10,10 @@ import World
 import Text.ParserCombinators.Parsec (ParseError) 
 import System.Environment 
 
---Location of game file (for now)
-placesFile :: String
-placesFile = "places.exp"
+--Location of default game
+exampleFile :: String
+exampleFile = "games/example.exp"
 
--- because Dictionary never changes
 data Game = Game { world :: World,
                    dictionary :: Dictionary } deriving Show
 
@@ -64,9 +63,6 @@ instance Eq Action where
 go :: NodeID -> World -> World  
 go n (World _ graph) = World n graph
 
-look :: World -> World
-look world = world 
-
 -- Checks whether input is in dictionary.
 validateInput :: String -> Game -> Response 
 validateInput "" _ = NoInput
@@ -99,11 +95,12 @@ stepWorld :: Response -> World -> World
 stepWorld (Okay (Action change)) world = change world
 stepWorld _ world = world
 
--- Get file from arguments (need to create function to check file!). Either
+-- Open a game file (need better way), check the game, and 
 -- initialize the loop or print the error. 
 main :: IO ()
 main = do
-    [file] <- getArgs
-    f <- readFile file
+    putStrLn "What game file would you like to play?" 
+    file <- getLine
+    f <- if file == "" then readFile exampleFile else readFile file
     let game = initGame f
     either print loop game

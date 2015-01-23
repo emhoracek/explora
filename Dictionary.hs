@@ -17,7 +17,7 @@ exitToDefinitions :: Exit -> [(UserInput, Direction)]
 exitToDefinitions (Exit dir [] _) = 
     [ (Prelude.map toLower dir, dir) ]
 exitToDefinitions (Exit dir (syn:syns) n) = 
-    (syn, dir) : exit2Definitions (Exit dir syns n)
+    (syn, dir) : exitToDefinitions (Exit dir syns n)
 
 inputToDirection :: UserInput -> Dictionary -> Maybe Direction
 inputToDirection = Data.Map.lookup
