@@ -13,14 +13,12 @@ toDictionary list = Data.Map.fromList $
 
 -- this changes the tuple of a canonical direction and a bunch of synonyms
 -- to a key, value pairing of a user input and direction
-exit2Definitions :: Exit -> [(UserInput, Direction)]
-exit2Definitions (Exit dir [] _) = 
+exitToDefinitions :: Exit -> [(UserInput, Direction)]
+exitToDefinitions (Exit dir [] _) = 
     [ (Prelude.map toLower dir, dir) ]
-exit2Definitions (Exit dir (syn:syns) n) = 
+exitToDefinitions (Exit dir (syn:syns) n) = 
     (syn, dir) : exit2Definitions (Exit dir syns n)
 
 inputToDirection :: UserInput -> Dictionary -> Maybe Direction
 inputToDirection = Data.Map.lookup
 
-defaultDirections :: [(UserInput, Direction)]
-defaultDirections = [ ("look", "look"), ("x", "look"), ("examine", "look") ]
