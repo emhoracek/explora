@@ -1,11 +1,13 @@
 module Main where
 
+import Actions
 import DIYGraph
 import Parse
 import Dictionary
 import Graph
 import Places
 import World
+
 
 import Text.ParserCombinators.Parsec (ParseError) 
 import System.Environment 
@@ -55,13 +57,6 @@ instance Show Response where
     show (BadInput input) = "I don't know what \"" ++ input ++ "\" means."
     show (Impossible dir) = "You can't go " ++ dir ++ "."
     show (Okay action) = "Okay."
-    
-newtype Action = Action { action :: World -> World }
-instance Eq Action where
-    (==) x y = True
-
-go :: NodeID -> World -> World  
-go n (World _ graph) = World n graph
 
 -- Checks whether input is in dictionary.
 validateInput :: String -> Game -> Response 

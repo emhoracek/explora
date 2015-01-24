@@ -4,6 +4,7 @@ import Test.Hspec
 import Test.Samples
 import Main
 import World
+import Actions
 
 main = hspec spec
 
