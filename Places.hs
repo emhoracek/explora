@@ -1,11 +1,9 @@
 module Places where
 
-import Inventory
-
 data Place =  Place { num          :: Int
                     , name         :: String
                     , description  :: String
-                    , inventory    :: Inventory
+                    , inventory    :: [String]
                     , exits        :: [Exit]
                       } deriving Eq
 instance Show Place where

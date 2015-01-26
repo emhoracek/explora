@@ -21,6 +21,7 @@ instance Functor (Graph blah) where
     fmap f ((linksA, node, linksB) :&: graph) = 
         (mapLinks linksA, node, mapLinks linksB) :&: fmap f graph 
         where mapLinks = map (\(a, b) -> (f a, b)) 
+-- I only added this to learn about functors
 
 singleton :: Node a -> Graph a ()
 singleton node = ([], node, []) :&: EmptyGraph

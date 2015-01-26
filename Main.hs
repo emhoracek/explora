@@ -5,9 +5,10 @@ import DIYGraph
 import Parse
 import Dictionary
 import Graph
+import Input
 import Places
-import World
-
+import Game
+import Response
 
 import Text.ParserCombinators.Parsec (ParseError) 
 import System.Environment 
@@ -16,8 +17,6 @@ import System.Environment
 exampleFile :: String
 exampleFile = "games/example.exp"
 
-data Game = Game { world :: World,
-                   dictionary :: Dictionary } deriving Show
 
 initGame :: String -> Either String Game
 initGame file =    
@@ -45,34 +44,11 @@ showDesc :: World -> String
 showDesc (World node graph) = name (label graph node) ++ "\n" ++ 
                               description (label graph node)
 
--- These are all the responses the player can get for their input.
--- "Okay Action" means it's okay to take that action.
-data Response = NoInput
-              | BadInput String
-              | Impossible Direction
-              | Okay Action
-              deriving Eq
-instance Show Response where
-    show NoInput = "Enter a direction, any direction."
-    show (BadInput input) = "I don't know what \"" ++ input ++ "\" means."
-    show (Impossible dir) = "You can't go " ++ dir ++ "."
-    show (Okay action) = "Okay."
-
--- Checks whether input is in dictionary.
-validateInput :: String -> Game -> Response 
-validateInput "" _ = NoInput
-validateInput input game = 
-    case inputToDirection input (dictionary game) of 
-        Just n -> validateDirection n game
-        Nothing -> BadInput input
-
--- Checks if the inputed direction is possible.
-validateDirection :: Direction -> Game -> Response
-validateDirection dir game = 
-    case findNodeByDirection 
-            (currentPlace $ world game) dir (mapGraph $ world game) of
-        Just n  -> Okay $ Action (go n)
-        Nothing -> Impossible dir 
+-- Checks if it's possible to verb that noun.
+validateAction :: Either Response Input -> Game -> Response
+validateAction input game = case input of
+    Left response   -> response
+    Right goodInput -> tryAction goodInput (world game) 
 
 -- Game loop. Show description of current state, get input from player,
 -- determine correct response and display, step world if possible, and loop.
@@ -80,14 +56,15 @@ loop :: Game -> IO ()
 loop game = do
     putStrLn $ showDesc $ world game
     inputDir <- getLine
-    let response = validateInput inputDir game
+    let input = validateInput inputDir (dictionary game)
+    let response = validateAction input game 
     print response
     let newWorld = stepWorld response (world game)
     loop (Game newWorld (dictionary game))
 
 -- If the response is "Okay", change the world, otherwise it says the same.
 stepWorld :: Response -> World -> World
-stepWorld (Okay (Action change)) world = change world
+stepWorld (Okay newWorld) world = newWorld
 stepWorld _ world = world
 
 -- Open a game file (need better way), check the game, and 

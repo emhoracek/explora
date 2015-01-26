@@ -48,7 +48,7 @@ spec =  do
                insertNodes [] sampleGraph `shouldBe` sampleGraph
         context "single node" $
             it "is the same as insertNode" $ property $
-                \x -> insertNodes [(x :: (Int, String))] sampleGraph
+                \x -> insertNodes [x :: (Int, String)] sampleGraph
                         == insertNode x sampleGraph
         context "multiple nodes" $
             it "should add the node to the graph" $

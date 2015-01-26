@@ -1,10 +1,18 @@
 module Actions where
    
-import World
+import Game
+import Graph
+import Dictionary
+import Places
+import Response
+import Input
 
-newtype Action = Action { action :: World -> World }
-instance Eq Action where
-    (==) x y = True -- maybe a bad idea but ???
+tryAction :: (String, String) -> World -> Response 
+tryAction ("go", direction) = go direction
+tryAction = Impossible "You can't do that."
 
-go :: Int -> World -> World  
-go n (World _ graph) = World n graph
+go :: Direction -> World -> Response
+go dir (World n graph) = 
+    case findNodeByDirection n dir graph of
+        Just newNode -> Okay (World newNode graph)
+        Nothing      -> Impossible ("You can't go " ++ dir ++ ".")
