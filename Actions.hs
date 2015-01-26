@@ -7,9 +7,9 @@ import Places
 import Response
 import Input
 
-tryAction :: (String, String) -> World -> Response 
-tryAction ("go", direction) = go direction
-tryAction = Impossible "You can't do that."
+tryAction :: Input -> World -> Response 
+tryAction ("go", direction) world = go direction world
+tryAction input _  = Impossible "You can't do that."
 
 go :: Direction -> World -> Response
 go dir (World n graph) = 

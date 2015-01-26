@@ -3,8 +3,10 @@ module Test.MainSpec (spec) where
 import Test.Hspec
 import Test.Samples
 import Main
-import World
+import Game
 import Actions
+import Input
+import Response 
 
 main = hspec spec
 
@@ -15,34 +17,34 @@ spec = do
             showDesc (World 1 sampleGraph) `shouldBe`
                  "A place\ndescription"
 
-    describe "validateDirection" $ do
+    describe "validateAction" $ do
         it "says okay if good direction from node" $
-            validateDirection "South" sampleGame 
-                `shouldBe` Okay (Action (go 2))
+            validateAction (Right ("go", "South")) sampleGame 
+                `shouldBe` Okay (World 2 sampleGraph)
         it "says impossible if can't go that way" $
-            validateDirection "North" sampleGame 
-                `shouldBe` Impossible "North"
+            validateAction (Right ("go", "North")) sampleGame 
+                `shouldBe` Impossible "You can't go North."
 
     describe "validateInput" $ do
         context "no input" $
             it "gives player instructions" $
-                validateInput "" sampleGame `shouldBe`
-                    NoInput 
+                validateInput "" sampleDefinitions `shouldBe`
+                    Left NoInput 
         context "input that's not in the dictionary" $
             it "tells the user it doesn't understand" $
-                validateInput "alberquerque" sampleGame `shouldBe`
-                    BadInput "alberquerque"
+                validateInput "alberquerque" sampleDefinitions `shouldBe`
+                    Left (BadInput "alberquerque")
         context "input in the dictionary but that doesn't work" $
-            it "tells the user they can't do that" $
-                validateInput "north" sampleGame `shouldBe`
-                    Impossible "North"
+            it "allows it for now" $
+                validateInput "north" sampleDefinitions `shouldBe`
+                    Right ("go", "North")
         context "good input" $ do
             it "says okay for a direction" $
-                validateInput "south" sampleGame `shouldBe`
-                    Okay (Action (go 2))
+                validateInput "south" sampleDefinitions `shouldBe`
+                    Right ("go", "South")
             it "says okay for \"go\" and a direction" $
-                validateInput "go south" sampleGame `shouldBe`
-                    Okay (Action (go 2))
+                validateInput "go south" sampleDefinitions `shouldBe`
+                    Right ("go", "South")
 
     describe "stepWorld" $ do
         context "valid direction" $

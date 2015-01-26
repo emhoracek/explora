@@ -5,14 +5,13 @@ import Test.QuickCheck
 import Data.Map (Map, fromList)
 import qualified Data.Map as Map
 import Places
+import Game
 import Graph
 import DIYGraph
 import Dictionary
 import Parse
 import Text.ParserCombinators.Parsec.Error(ParseError(..), Message, newErrorMessage, errorMessages, messageEq)
 import Main
-import World
-import Inventory
 
 import Text.Parsec.Pos(SourcePos, initialPos)
 
@@ -57,7 +56,7 @@ sampleMap2Defs = Map.fromList [ ("s", "South"), ("south", "South"),
 sampleMap2Exits = [ Exit "South" ["s"] 2, Exit "North" ["n"] 1, 
                     Exit "West" ["w"] 2]
 
-sampleMapExitsBad :: String
+sampleMapExitsBad  String
 sampleMapExitsBad = "-> South @#4 f(s): 2"
 
 sampleWorld :: World
