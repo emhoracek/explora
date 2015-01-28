@@ -25,8 +25,8 @@ sampleExits :: [Exit]
 sampleExits = [ Exit "South" ["s"] 2 ]
 
 samplePlaces :: [ Place ]
-samplePlaces = [ Place 1 "A place" "description" [] [Exit "South" ["s"] 2] ,
-                 Place 2 "A place" "description" [] [Exit "North" ["n"] 1] ]
+samplePlaces = [ Place 1 "A place" "description" [] [] [Exit "South" ["s"] 2] ,
+                 Place 2 "A place" "description" [] [] [Exit "North" ["n"] 1] ]
 
 sampleGraph = ( [("North", 2)], (1, head samplePlaces), [("South", 2)]) :&:
               (([("South", 1)], (2, last samplePlaces), [("North", 1)]) :&: EmptyGraph)
@@ -41,9 +41,9 @@ sampleMap2 = "1. A place\n description\n-> South (s): 2\n" ++
              "3. A place\n description\n-> North (n): 1, West (w): 2"
 
 samplePlaces2 :: [ Place ]
-samplePlaces2 = [ Place 1 "A place" "description" [] [Exit "South" ["s"] 2],
-                  Place 2 "A pit" "description" [] [],
-                  Place 3 "A place" "description" [] [Exit "North" ["n"] 1, Exit "West" ["w"] 2]]
+samplePlaces2 = [ Place 1 "A place" "description" [] [] [Exit "South" ["s"] 2],
+                  Place 2 "A pit" "description" [] [] [],
+                  Place 3 "A place" "description" [] [] [Exit "North" ["n"] 1, Exit "West" ["w"] 2]]
 
 sampleMapExitsGood = "-> South (s): 2"
 
@@ -61,10 +61,7 @@ sampleMapExitsBad = "-> South @#4 f(s): 2"
 samplePlayer :: Player 
 samplePlayer = Player 1 [] 0 True
 
-sampleWorld :: World
-sampleWorld = World { player = samplePlayer,
-                      mapGraph = sampleGraph }
-
 sampleGame :: Game
-sampleGame = Game { world = sampleWorld,
+sampleGame = Game { player = samplePlayer, 
+                    mapGraph = sampleGraph,
                     dictionary = sampleDefinitions }

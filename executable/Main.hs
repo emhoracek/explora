@@ -36,32 +36,36 @@ parseGame (Left  p)  _        = Left $ show p
 
 
 -- Shows description of a new place.
-showDesc :: World -> String
-showDesc (World (Player node _  _ _) graph) = 
+showDesc :: Game -> String
+showDesc (Game (Player node _  _ _) graph _ ) = 
     name (label graph node) ++ "\n" ++ 
         description (label graph node)
-
--- Checks if it's possible to verb that noun.
-validateAction :: Either Response Input -> Game -> Response
-validateAction input game = case input of
-    Left response   -> response
-    Right goodInput -> tryAction goodInput (world game) 
 
 -- Game loop. Show description of current state, get input from player,
 -- determine correct response and display, step world if possible, and loop.
 loop :: Game -> IO ()
 loop game = do
-    putStrLn $ showDesc $ world game
+    putStrLn $ showDesc game 
     inputDir <- getLine
     let input = validateInput inputDir (dictionary game)
     let response = validateAction input game 
     print response
-    let newWorld = stepWorld response (world game)
-    loop (Game newWorld (dictionary game))
+    let newWorld = stepWorld response game 
+    let todo = onEntry $ label (mapGraph newWorld) (currentPlace $ player newWorld)
+    let nextWorld = if null todo then newWorld 
+                        else entryAction todo newWorld
+    if (not $ alive $ player nextWorld) then return () else loop nextWorld 
+
+entryAction :: String -> Game -> Game
+entryAction string game = 
+    let input = validateInput string (dictionary game)
+        response = validateAction input game in
+    stepWorld response game
 
 -- If the response is "Okay", change the world, otherwise it says the same.
-stepWorld :: Response -> World -> World
-stepWorld (Okay newWorld) world = newWorld
+stepWorld :: Response -> Game -> Game
+stepWorld (Okay newWorld) _ =
+    newWorld
 stepWorld _ world = world
 
 -- Open a game file (need better way), check the game, and 

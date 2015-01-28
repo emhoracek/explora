@@ -6,11 +6,8 @@ import Dictionary
 import Graph
 import Places
 
-
-data World = World { player :: Player,
-                     mapGraph :: Graph Place String } deriving (Eq, Show)
-
-data Game = Game { world :: World,
+data Game = Game { player :: Player,
+                   mapGraph :: Graph Place String,
                    dictionary :: Dictionary } deriving (Eq, Show)
 
 data Player = Player { currentPlace:: NodeID,
@@ -27,4 +24,4 @@ makePlayer graph = Player { currentPlace = head $ nodes graph,
 
 makeGame :: [Place] -> Dictionary -> Game
 makeGame p d = let graph = createGraph p in
-               Game (World (makePlayer graph) graph) d
+               Game (makePlayer graph) graph d

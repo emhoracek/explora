@@ -1,13 +1,13 @@
 module Response where
 
-import Game (World(..))
+import Game (Game(..))
 
 -- These are all the responses the player can get for their input.
 -- "Okay Action" means it's okay to take that action.
 data Response = NoInput
               | BadInput String
               | Impossible String
-              | Okay World
+              | Okay Game
               deriving Eq
 instance Show Response where
     show NoInput = "Enter a direction, any direction."

@@ -31,6 +31,7 @@ validateInput string dict
     | stripExtraSpaces string == "" = Left NoInput 
     | isADirection string dict      = toDirection string dict
     | firstWord == "go"             = toDirection rest dict
+    | string == "kill player"       = Right $ ("kill", "player")
     | otherwise                     = Left $ BadInput string 
     where firstWord = stripExtraSpaces $ head $ words string
           rest = concat $ tail $ words string

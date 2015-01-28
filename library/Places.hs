@@ -4,6 +4,7 @@ data Place =  Place { num          :: Int
                     , name         :: String
                     , description  :: String
                     , inventory    :: [String]
+                    , onEntry      :: String
                     , exits        :: [Exit]
                       } deriving Eq
 instance Show Place where
@@ -13,7 +14,7 @@ instance Show Place where
                  show (exits place)
 
 defaultPlace :: Place
-defaultPlace = Place 1 "A place" "Description of the place." [] [defaultExit]
+defaultPlace = Place 1 "A place" "Description of the place." [] [] [defaultExit]
 
 type Direction = String
 
