@@ -23,13 +23,27 @@ parsePlace = do
     char '\n'
     skipMany space
     desc <- validPlaceString
+    action <- listOfActions
     char '\n'
+    skipMany space
     exits <- listOfExits
     skipMany (char '\n')
-    return $ Place (read num) name desc [] [] exits
+    return $ Place (read num) name desc [] action exits
 
 validPlaceString :: Parser String
-validPlaceString = many (noneOf "\n")
+validPlaceString = many (noneOf "\n*")
+
+listOfActions :: Parser String
+listOfActions = option "" $ try parseAction 
+
+parseAction :: Parser String
+parseAction = do
+    char '\n'
+    skipMany space
+    char '*'
+    skipMany space
+    string <- validPlaceString
+    return string
 
 -- what about multiword synonyms? are those okay?
 validExitString :: Parser String
