@@ -7,10 +7,10 @@ import Game (Game(..))
 data Response = NoInput
               | BadInput String
               | Impossible String
-              | Okay Game
+              | Okay Game String
               deriving Eq
 instance Show Response where
     show NoInput = "Enter a direction, any direction."
     show (BadInput input) = "I don't know what \"" ++ input ++ "\" means."
     show (Impossible reason) = "That's impossible. " ++ reason 
-    show (Okay world) = "Okay."
+    show (Okay world string) = string

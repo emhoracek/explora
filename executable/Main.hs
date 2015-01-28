@@ -49,22 +49,25 @@ loop game = do
     inputDir <- getLine
     let input = validateInput inputDir (dictionary game)
     let response = validateAction input game 
-    print response
     let newWorld = stepWorld response game 
+    print response
     let todo = onEntry $ label (mapGraph newWorld) (currentPlace $ player newWorld)
-    let nextWorld = if null todo then newWorld 
+    nextWorld <- if null todo then return newWorld
                         else entryAction todo newWorld
-    if isAlive nextWorld then loop nextWorld else return () 
+    if isAlive nextWorld then loop nextWorld else putStrLn $ showDesc newWorld  
 
-entryAction :: String -> Game -> Game
-entryAction string game = 
-    let input = validateInput string (dictionary game)
-        response = validateAction input game in
-    stepWorld response game
+entryAction :: String -> Game -> IO Game
+entryAction string game = do
+    let input = validateInput string (dictionary game) 
+    let response = validateAction input game
+    let newWorld = stepWorld response game
+    return newWorld
+
+
 
 -- If the response is "Okay", change the world, otherwise it says the same.
 stepWorld :: Response -> Game -> Game
-stepWorld (Okay newWorld) _ =
+stepWorld (Okay newWorld string) _ =
     newWorld
 stepWorld _ world = world
 
