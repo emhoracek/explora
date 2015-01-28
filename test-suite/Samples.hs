@@ -11,7 +11,6 @@ import DIYGraph
 import Dictionary
 import Parse
 import Text.ParserCombinators.Parsec.Error(ParseError(..), Message, newErrorMessage, errorMessages, messageEq)
-import Main
 
 import Text.Parsec.Pos(SourcePos, initialPos)
 

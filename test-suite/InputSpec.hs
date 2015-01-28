@@ -17,6 +17,10 @@ spec = do
         context "no input" $
             it "gives player instructions" $
                 validateInput "" sampleDefinitions `shouldBe`
+                    Left NoInput
+        context "only spaces" $
+            it "treats the same as no input" $
+                validateInput "    " sampleDefinitions `shouldBe`
                     Left NoInput 
         context "input that's not in the dictionary" $
             it "tells the user it doesn't understand" $

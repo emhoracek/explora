@@ -27,11 +27,11 @@ toDirection input dict =
        Nothing  -> Left (BadInput input)
 
 validateInput :: String -> Dictionary -> Either Response Input
-validateInput "" _ = Left NoInput
-validateInput string dict 
-    | isADirection string dict = toDirection string dict
-    | firstWord == "go"        = toDirection rest dict
-    | otherwise                = Left $ BadInput string 
+validateInput string dict
+    | stripExtraSpaces string == "" = Left NoInput 
+    | isADirection string dict      = toDirection string dict
+    | firstWord == "go"             = toDirection rest dict
+    | otherwise                     = Left $ BadInput string 
     where firstWord = stripExtraSpaces $ head $ words string
           rest = concat $ tail $ words string
         
