@@ -1,8 +1,8 @@
-module Test.ParseSpec (spec) where
+module ParseSpec (spec) where
 
 import Test.Hspec
 import Parse
-import Test.Samples
+import Samples
 
 main :: IO()
 main = hspec spec

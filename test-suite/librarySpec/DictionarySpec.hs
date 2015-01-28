@@ -1,11 +1,11 @@
-module Test.DictionarySpec (spec) where
+module DictionarySpec (spec) where
 
 import Test.Hspec
 import Dictionary
 import Places
 import Data.Map (Map, fromList)
 import qualified Data.Map as Map
-import Test.Samples
+import Samples
 
 main :: IO()
 main = hspec spec

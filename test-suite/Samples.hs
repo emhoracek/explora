@@ -1,4 +1,4 @@
-module Test.Samples where
+module Samples where
 
 import Test.Hspec
 import Test.QuickCheck
@@ -56,7 +56,7 @@ sampleMap2Defs = Map.fromList [ ("s", "South"), ("south", "South"),
 sampleMap2Exits = [ Exit "South" ["s"] 2, Exit "North" ["n"] 1, 
                     Exit "West" ["w"] 2]
 
-sampleMapExitsBad  String
+sampleMapExitsBad ::  String
 sampleMapExitsBad = "-> South @#4 f(s): 2"
 
 sampleWorld :: World

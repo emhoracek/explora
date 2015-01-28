@@ -1,7 +1,7 @@
-module Test.MainSpec (spec) where
+module MainSpec (spec) where
 
 import Test.Hspec
-import Test.Samples
+import Samples
 import Main
 import Game
 import Actions

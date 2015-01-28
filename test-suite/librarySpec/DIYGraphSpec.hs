@@ -1,4 +1,4 @@
-module HSpecTests where
+module DIYGraphSpec (spec) where
 
 import Test.Hspec
 import Test.QuickCheck

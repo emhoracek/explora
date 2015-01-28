@@ -1,8 +1,8 @@
-module Test.GraphSpec (spec) where
+module GraphSpec (spec) where
 
 import Test.Hspec
 import Graph
-import Test.Samples
+import Samples
 import Places ( defaultPlace ) 
 import DIYGraph
 
