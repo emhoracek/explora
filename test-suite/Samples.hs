@@ -59,7 +59,7 @@ sampleMapExitsBad ::  String
 sampleMapExitsBad = "-> South @#4 f(s): 2"
 
 samplePlayer :: Player 
-samplePlayer = Player 1 [] 0 True
+samplePlayer = Player 1 [] 0 Alive
 
 sampleGame :: Game
 sampleGame = Game { player = samplePlayer, 

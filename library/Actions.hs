@@ -15,15 +15,12 @@ validateAction input game = case input of
 
 tryAction :: Input -> Game -> Response 
 tryAction ("go", direction) world = go direction world
-tryAction ("kill", "player") world = killPlayer world
+tryAction ("kill", "player") world = Okay $ killPlayer world
 tryAction input _  = Impossible "You can't do that."
 
 go :: Direction -> Game -> Response
-go dir (Game (Player n i s a) graph dict) = 
+go dir game@(Game (Player n i s a) graph dict) = 
     case findNodeByDirection n dir graph of
-        Just newNode -> Okay (Game (Player newNode i s a) graph dict)
+        Just newNode -> Okay (movePlayer game 2)
         Nothing      -> Impossible ("You can't go " ++ dir ++ ".")
 
-killPlayer :: Game -> Response
-killPlayer (Game (Player n i s a) graph dict) =
-    Okay $ Game  (Player n i s False) graph dict

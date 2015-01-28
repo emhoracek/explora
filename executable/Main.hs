@@ -54,7 +54,7 @@ loop game = do
     let todo = onEntry $ label (mapGraph newWorld) (currentPlace $ player newWorld)
     let nextWorld = if null todo then newWorld 
                         else entryAction todo newWorld
-    if (not $ alive $ player nextWorld) then return () else loop nextWorld 
+    if isAlive nextWorld then loop nextWorld else return () 
 
 entryAction :: String -> Game -> Game
 entryAction string game = 
