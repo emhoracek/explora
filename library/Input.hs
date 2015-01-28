@@ -8,6 +8,14 @@ type Verb = String
 type Noun = String
 type Input = (Verb, Noun)
 
+stripExtraSpaces :: String -> String
+stripExtraSpaces string
+    | string == " " || string == ""  = ""
+    | head string == ' ' = stripExtraSpaces $ tail string
+    | last string == ' ' = stripExtraSpaces $ init string
+    | otherwise          = string
+    
+
 isADirection :: String -> Dictionary -> Bool
 isADirection string dict = not (null $ words string) && 
                            isJust (inputToDirection string dict)
@@ -24,6 +32,6 @@ validateInput string dict
     | isADirection string dict = toDirection string dict
     | firstWord == "go"        = toDirection rest dict
     | otherwise                = Left $ BadInput string 
-    where firstWord = head $ words string
+    where firstWord = stripExtraSpaces $ head $ words string
           rest = concat $ tail $ words string
         
