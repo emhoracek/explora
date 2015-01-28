@@ -58,8 +58,11 @@ sampleMap2Exits = [ Exit "South" ["s"] 2, Exit "North" ["n"] 1,
 sampleMapExitsBad ::  String
 sampleMapExitsBad = "-> South @#4 f(s): 2"
 
+samplePlayer :: Player 
+samplePlayer = Player 1 [] 0 True
+
 sampleWorld :: World
-sampleWorld = World { currentPlace = 1,
+sampleWorld = World { player = samplePlayer,
                       mapGraph = sampleGraph }
 
 sampleGame :: Game

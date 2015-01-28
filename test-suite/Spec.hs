@@ -2,6 +2,7 @@ module Spec where
 
 import Test.Hspec
 
+import qualified ActionsSpec
 import qualified DictionarySpec
 import qualified GraphSpec
 import qualified ParseSpec
@@ -14,6 +15,7 @@ main = hspec spec
 
 spec :: Spec
 spec = do
+    describe "Actions"    ActionsSpec.spec
     describe "Graph"      GraphSpec.spec
     describe "Dictionary" DictionarySpec.spec
     describe "Input"      InputSpec.spec

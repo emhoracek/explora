@@ -34,15 +34,12 @@ parseGame (Right p) (Right d) = Right $ makeGame p d
 parseGame (Right p) (Left  d) = Left $ show d
 parseGame (Left  p)  _        = Left $ show p
 
--- Games start at the first node listed in the graph.
-makeGame :: [Place] -> Dictionary -> Game
-makeGame p d = let graph = createGraph p in
-               Game (World (head $ nodes graph) graph) d
 
 -- Shows description of a new place.
 showDesc :: World -> String
-showDesc (World node graph) = name (label graph node) ++ "\n" ++ 
-                              description (label graph node)
+showDesc (World (Player node _  _ _) graph) = 
+    name (label graph node) ++ "\n" ++ 
+        description (label graph node)
 
 -- Checks if it's possible to verb that noun.
 validateAction :: Either Response Input -> Game -> Response

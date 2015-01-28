@@ -14,13 +14,13 @@ spec :: Spec
 spec = do 
     describe "showDesc" $
        it "gets the desciption of a place on the graph" $
-            showDesc (World 1 sampleGraph) `shouldBe`
+            showDesc (World samplePlayer sampleGraph) `shouldBe`
                  "A place\ndescription"
 
     describe "validateAction" $ do
         it "says okay if good direction from node" $
             validateAction (Right ("go", "South")) sampleGame 
-                `shouldBe` Okay (World 2 sampleGraph)
+                `shouldBe` Okay (World (Player 2 [] 0 True) sampleGraph)
         it "says impossible if can't go that way" $
             validateAction (Right ("go", "North")) sampleGame 
                 `shouldBe` Impossible "You can't go North."
