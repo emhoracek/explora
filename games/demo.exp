@@ -1,0 +1,12 @@
+1. An empty room.
+    This is an empty room. Exits to the south and east.
+-> South (s): 2, East (e): 3
+2. A room with a shimmering door
+    This room is unremarkable except for a shimmering door to the east. There's a more normal door on the north wall.
+-> East: 2, North (n): 1
+3. A room with a bottomless pit
+    There is a huge hole in the floor of this room. You could easily fall in if you go further east!
+-> West (w): 1, East (e): 4
+4. The Pit
+    You fall in the pit and die.
+* kill player

@@ -21,6 +21,6 @@ tryAction input _  = Impossible "You can't do that."
 go :: Direction -> Game -> Response
 go dir game@(Game (Player n i s a) graph dict) = 
     case findNodeByDirection n dir graph of
-        Just newNode -> Okay (movePlayer game 2)
+        Just newNode -> Okay (movePlayer game newNode)
         Nothing      -> Impossible ("You can't go " ++ dir ++ ".")
 
