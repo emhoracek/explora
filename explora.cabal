@@ -64,6 +64,7 @@ test-suite tests
     build-depends:
         base
       , containers
+      , explora
       , parsec
       , hspec ==2.*
         , HUnit
@@ -75,20 +76,12 @@ test-suite tests
         -Wall
 --        -Werror
     hs-source-dirs:
-        executable
         library
         test-suite
-            test-suite/executableSpec
-            test-suite/librarySpec
     main-is:
         Spec.hs
-    other-modules:
-        Actions, Dictionary, DIYGraph, Game, Graph, Input, Parse, Places, Response, Main
-        , ActionsSpec, DictionarySpec, DIYGraphSpec, GraphSpec
-        , ParseSpec, MainSpec
     type:
         exitcode-stdio-1.0
-
 
 test-suite coverage
     build-depends:

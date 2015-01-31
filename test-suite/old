@@ -2,17 +2,22 @@ module Spec where
 
 import Test.Hspec
 
-import qualified Test.DictionarySpec
-import qualified Test.GraphSpec
-import qualified Test.ParseSpec
-import qualified Test.MainSpec
+import qualified ActionsSpec
+import qualified DictionarySpec
+import qualified GraphSpec
+import qualified ParseSpec
+import qualified MainSpec
+import qualified InputSpec
+
 
 main :: IO()
 main = hspec spec
 
 spec :: Spec
 spec = do
-    describe "Graph"      Test.GraphSpec.spec
-    describe "Dictionary" Test.DictionarySpec.spec
-    describe "Parse"      Test.ParseSpec.spec
-    describe "Main"       Test.MainSpec.spec
+    describe "Actions"    ActionsSpec.spec
+    describe "Graph"      GraphSpec.spec
+    describe "Dictionary" DictionarySpec.spec
+    describe "Input"      InputSpec.spec
+    describe "Parse"      ParseSpec.spec
+    describe "Main"       MainSpec.spec

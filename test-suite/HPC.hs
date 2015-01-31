@@ -15,7 +15,7 @@ expected = 90
 
 main :: IO ()
 main = do
-    output <- readProcess "hpc" ["report", "dist/hpc/tix/hspec/hspec.tix"] ""
+    output <- readProcess "hpc" ["report", "tests.tix"] ""
     if average (match output) >= expected
         then exitSuccess
         else putStr output >> exitFailure
