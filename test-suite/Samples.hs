@@ -10,6 +10,7 @@ import Graph
 import DIYGraph
 import Dictionary
 import Parse
+import Player
 import Text.ParserCombinators.Parsec.Error(ParseError(..), Message, newErrorMessage, errorMessages, messageEq)
 
 import Text.Parsec.Pos(SourcePos, initialPos)
@@ -59,7 +60,7 @@ sampleMapExitsBad ::  String
 sampleMapExitsBad = "-> South @#4 f(s): 2"
 
 samplePlayer :: Player 
-samplePlayer = Player 1 [] 0 Alive
+samplePlayer = makePlayer sampleGraph
 
 sampleGame :: Game
 sampleGame = Game { player = samplePlayer, 

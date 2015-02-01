@@ -4,6 +4,7 @@ import Game
 import Graph
 import Dictionary
 import Places
+import Player
 import Response
 import Input
 
@@ -14,13 +15,14 @@ validateAction input game = case input of
     Right goodInput -> tryAction goodInput game 
 
 tryAction :: Input -> Game -> Response 
-tryAction ("go", direction) world = go direction world
-tryAction ("kill", "player") world = Okay (killPlayer world) "You have died."
+tryAction ("go", direction) game = go direction game
+tryAction ("kill", "player") game = Okay game { player = killPlayer (player game) } "You have died."
 tryAction input _  = Impossible "You can't do that."
 
 go :: Direction -> Game -> Response
-go dir game@(Game (Player n i s a) graph dict) = 
-    case findNodeByDirection n dir graph of
-        Just newNode -> Okay (movePlayer game newNode) ""
+go dir game =
+    let n = currentPlace $ player game in
+    case findNodeByDirection n dir (mapGraph game) of
+        Just newNode -> Okay game { player = movePlayer newNode (player game)} ""
         Nothing      -> Impossible ("You can't go " ++ dir ++ ".")
 

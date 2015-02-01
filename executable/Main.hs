@@ -7,6 +7,7 @@ import Dictionary
 import Graph
 import Input
 import Places
+import Player
 import Game
 import Response
 
@@ -37,7 +38,9 @@ parseGame (Left  p)  _        = Left $ show p
 
 -- Shows description of a new place.
 showDesc :: Game -> String
-showDesc (Game (Player node _  _ _) graph _ ) = 
+showDesc game  =
+    let node = currentPlace $ player game 
+        graph = mapGraph game in 
     name (label graph node) ++ "\n" ++ 
         description (label graph node)
 
@@ -54,7 +57,7 @@ loop game = do
     let todo = onEntry $ label (mapGraph newWorld) (currentPlace $ player newWorld)
     nextWorld <- if null todo then return newWorld
                         else entryAction todo newWorld
-    if isAlive nextWorld then loop nextWorld else putStrLn $ showDesc newWorld  
+    if getAttribute "Alive" (player nextWorld) == Just True then loop nextWorld else putStrLn $ showDesc newWorld  
 
 entryAction :: String -> Game -> IO Game
 entryAction string game = do
