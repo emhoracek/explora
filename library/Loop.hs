@@ -1,0 +1,38 @@
+module Loop where
+
+import Places
+import Player
+import DIYGraph
+import Graph
+import Input
+import Actions
+import Response
+import Game
+
+-- Game loop. Show description of current state, get input from player,
+-- determine correct response and display, step world if possible, and loop.
+loop :: Game -> IO ()
+loop game = do
+    putStrLn $ look game 
+    inputDir <- getLine
+    let input = validateInput inputDir (dictionary game)
+    let response = validateAction input game 
+    let newWorld = stepWorld response game 
+    print response
+    let todo = onEntry $ label (mapGraph newWorld) (currentPlace $ player newWorld)
+    nextWorld <- if null todo then return newWorld
+                        else entryAction todo newWorld
+    if getAttribute "Alive" (player nextWorld) == Just True then loop nextWorld else putStrLn $ look newWorld  
+
+entryAction :: String -> Game -> IO Game
+entryAction string game = do
+    let input = validateInput string (dictionary game) 
+    let response = validateAction input game
+    let newWorld = stepWorld response game
+    return newWorld
+
+-- If the response is "Okay", change the world, otherwise it says the same.
+stepWorld :: Response -> Game -> Game
+stepWorld (Okay newWorld string) _ =
+    newWorld
+stepWorld _ world = world
