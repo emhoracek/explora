@@ -34,14 +34,18 @@ You can make your own map to explore and share with friends! The map file should
    -> Direction: 1
 3. A place with no exits
    Description
+4. A dangerous room
+   A room that kills the player.
+   * kill player
 ```
 
 In other words,
-<ol><li>Start with a unique number for the place then a period.
-<li>Type the place name.
-<li>On a new line, add a description of the place.
-<li>On the next like, type "->" and a list of the exits from the place, if any. An exit is a direction to go in, optional synonyms for that direction within parentheses, a colon and space, and the number of the place to which it leads. Note that right now, directions and synonyms have to the single words. I would love to fix this!
-<li>Start a new line for each place on the map.</ol>
+<ol><li>Start with a unique number for the place then a period.</li>
+<li>Type the place name.</li>
+<li>On a new line, add a description of the place.</li>
+<li>Next you can optionally have an action that will happen on entering the place. Right now you can only "kill player" or "go (direction)". Just start the line with an asterisk ("*").
+<li>On the next like, type "->" and a list of the exits from the place, if any. An exit is a direction to go in, optional synonyms for that direction within parentheses, a colon and space, and the number of the place to which it leads. Note that right now, directions and synonyms have to the single words. I would love to fix this!</li>
+<li>Start a new line for each place on the map.</li></ol>
 
 If you have any questions, email me at libby@daydrea.me or add an issue here!
 
