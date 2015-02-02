@@ -7,9 +7,6 @@ import Data.Map (Map, fromList)
 import qualified Data.Map as Map
 import Samples
 
-main :: IO()
-main = hspec spec
-
 spec :: Spec
 spec =  do
     describe "toDefinition" $ 

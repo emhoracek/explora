@@ -25,8 +25,6 @@ longerGraph :: Graph String String
 longerGraph = ([("mother", 2)], (1, "Marilyn"), [("mother of",2)]) :&:
               (([("daughter", 1)], (2, "Libby"), [("daughter of",1)]) :&: EmptyGraph)
 
-main = hspec spec
-
 spec =  do
     describe "fmap" $ do
         it "satisfies law 1" $
@@ -34,6 +32,7 @@ spec =  do
         it "satisfies law 2" $
             fmap ((+2) . (* 4)) sampleGraphInt `shouldBe`
                 (fmap (+2) . fmap (*4)) sampleGraphInt
+   
     describe "singleton" $ 
         it "is a single node with no edges" $
             singleton (1, "hello") `shouldBe` sampleGraph2
@@ -70,10 +69,17 @@ spec =  do
             it "removes node and context from graph" $
                 removeNode (1, "hello") sampleGraph `shouldBe`
                     EmptyGraph
+        context "larger graph" $
+            it "removes node and context from graph" $
+                removeNode (2, "Libby") longerGraph `shouldBe`
+                    (([("mother", 2)], (1, "Marilyn"), [("mother of",2)]) :&: EmptyGraph)
         context "node not in graph" $
             it "returns the same graph" $
                 removeNode (12, "yo") sampleGraph `shouldBe`
                     sampleGraph
+        context "empty graph" $
+            it "returns an empty graph" $
+                removeNode (12, "yo") EmptyGraph `shouldBe` (EmptyGraph :: Graph String Int) 
 
     describe "insertEdge" $ do
         context "empty graph" $
@@ -100,4 +106,12 @@ spec =  do
         it "turns a list of links to a list of edges" $
             linksToEdges 1 longerGraph `shouldBe`
                 [(1, 2, "mother of")]
- 
+
+    describe "nodeToContect" $ do
+        context "existing node" $
+            it "returns the context" $
+                nodeToContext 2 longerGraph `shouldBe`
+                  ([("daughter", 1)], (2, "Libby"), [("daughter of",1)])
+        context "nonexistent node" $
+            it "????" $
+                pendingWith "This is going to be a problem" 

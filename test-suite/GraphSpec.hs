@@ -6,9 +6,6 @@ import Samples
 import Places ( defaultPlace ) 
 import DIYGraph
 
-main :: IO()
-main = hspec spec
-
 spec =  do
     
     describe "nodeFromPlace" $

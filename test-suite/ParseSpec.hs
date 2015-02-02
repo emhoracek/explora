@@ -4,9 +4,6 @@ import Test.Hspec
 import Parse
 import Samples
 
-main :: IO()
-main = hspec spec
-
 spec :: Spec
 spec =  do
     describe "parseExits" $ do

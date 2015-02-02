@@ -33,8 +33,8 @@ changeInfo string f player =
 getInfo :: String -> Player -> Maybe String
 getInfo string player = Data.Map.lookup string (playerInfo player)
 
-changeStats :: String -> (Int -> Int) -> Player -> Player
-changeStats string f player = 
+changeStat :: String -> (Int -> Int) -> Player -> Player
+changeStat string f player = 
     player { playerStats = adjust f string (playerStats player) } 
 
 getStat :: String -> Player -> Maybe Int

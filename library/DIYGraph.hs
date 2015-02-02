@@ -43,8 +43,8 @@ findNode x ((_, (n, _), _) :&: graph)
 removeNode :: (Eq a) => Node a -> Graph a b -> Graph a b
 removeNode _ EmptyGraph = EmptyGraph
 removeNode x graph@(context@(_, node, _) :&: g) 
-    | x == node          = g
-    | findNode (fst x) g = removeNode x g
+    | x == node          = g 
+    | findNode (fst x) g = context :&: removeNode x g
     | otherwise          = graph
 
 insertEdge :: Edge b -> Graph a b -> Graph a b
@@ -53,10 +53,10 @@ insertEdge edge graph@(context :&: g) =
     addEdgeToContext edge context :&: insertEdge edge g
 
 insertEdges :: [Edge b] -> Graph a b -> Graph a b
-insertEdges _ EmptyGraph = EmptyGraph
-insertEdges [] graph = graph
-insertEdges (edge:edges) graph = 
-    insertEdge edge (insertEdges edges graph)
+--insertEdges _ EmptyGraph = EmptyGraph
+--insertEdges [] graph = graph
+insertEdges edges graph = foldl (flip insertEdge) graph edges 
+--    insertEdges edges (insertEdge edge graph)
 
 addEdgeToContext :: Edge b -> Context a b -> Context a b 
 addEdgeToContext (n1, n2, label) (linksA, node, linksB)
@@ -67,7 +67,6 @@ addEdgeToContext (n1, n2, label) (linksA, node, linksB)
     | otherwise = (linksA, node, linksB)
 
 fromLists :: [Node a] -> [Edge b] -> Graph a b
-fromLists  nodes [] = insertNodes nodes EmptyGraph
 fromLists nodes edges = insertEdges edges $ insertNodes nodes EmptyGraph
 
 nodeToContext :: NodeID -> Graph a b -> Context a b
