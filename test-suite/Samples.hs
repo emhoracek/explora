@@ -19,6 +19,15 @@ import Text.Parsec.Pos(SourcePos, initialPos)
 instance Eq ParseError where
    a == b = errorMessages a == errorMessages b
 
+sampleFile :: String
+sampleFile = 
+    "1. A place\n\
+    \    description\n\
+    \-> South (s): 2\n\
+    \2. A place\n\
+    \    description\n\
+    \-> North (n): 1"
+
 sampleDefinitions :: Dictionary 
 sampleDefinitions = Map.fromList [ ("s", "South"), ("n", "North"), ("south", "South"), ("north", "North") ]
 

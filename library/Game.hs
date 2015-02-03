@@ -19,7 +19,6 @@ initGame file =
         d = parseDictionary file in
     parseGame p d
 
-
 -- is this the best way to "add" these Eithers?
 -- If both are Right, make the game. If the place file was file, but the
 -- dictionary wasn't, show the error for the dictionary. Otherwise, show 
@@ -27,7 +26,7 @@ initGame file =
 parseGame :: Either ParseError [Place] -> Either ParseError Dictionary ->
                 Either String Game
 parseGame (Right p) (Right d) = Right $ makeGame p d
-parseGame (Right p) (Left  d) = Left $ show d
+parseGame (Right _) (Left  d) = Left $ show d
 parseGame (Left  p)  _        = Left $ show p
 
 makeGame :: [Place] -> Dictionary -> Game

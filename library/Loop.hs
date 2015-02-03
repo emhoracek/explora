@@ -3,9 +3,9 @@ module Loop where
 import Places
 import Player
 import DIYGraph
-import Graph
 import Input
 import Actions
+import Properties
 import Response
 import Game
 
@@ -22,8 +22,11 @@ loop game = do
     let todo = onEntry $ label (mapGraph newWorld) (currentPlace $ player newWorld)
     nextWorld <- if null todo then return newWorld
                         else entryAction todo newWorld
-    if getAttribute "Alive" (player nextWorld) == Just True then loop nextWorld else putStrLn $ look newWorld  
+    if getInfo "Alive" (playerInfo $ player nextWorld) == Just "True" 
+        then loop nextWorld 
+        else putStrLn $ look newWorld  
 
+-- This SUCKS
 entryAction :: String -> Game -> IO Game
 entryAction string game = do
     let input = validateInput string (dictionary game) 
@@ -33,6 +36,6 @@ entryAction string game = do
 
 -- If the response is "Okay", change the world, otherwise it says the same.
 stepWorld :: Response -> Game -> Game
-stepWorld (Okay newWorld string) _ =
+stepWorld (Okay newWorld _) _ =
     newWorld
 stepWorld _ world = world

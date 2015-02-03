@@ -13,4 +13,4 @@ instance Show Response where
     show NoInput = "Enter a direction, any direction."
     show (BadInput input) = "I don't know what \"" ++ input ++ "\" means."
     show (Impossible reason) = "That's impossible. " ++ reason 
-    show (Okay world string) = string
+    show (Okay _ string) = string

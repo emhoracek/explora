@@ -3,7 +3,6 @@ module Actions where
 import DIYGraph   
 import Game
 import Graph
-import Dictionary
 import Places
 import Player
 import Response
@@ -19,7 +18,7 @@ tryAction :: Input -> Game -> Response
 tryAction ("go", direction) game = go direction game
 tryAction ("kill", "player") game = Okay game { player = killPlayer (player game) } "You have died."
 tryAction ("look", "") game = Okay game (look game)
-tryAction input _  = Impossible "You can't do that."
+tryAction _ _  = Impossible "You can't do that."
 
 go :: Direction -> Game -> Response
 go dir game =

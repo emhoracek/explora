@@ -1,11 +1,10 @@
 module DIYGraph where
 
+-- kinda copying fgl
+
 type NodeID = Int
-
 type Node a = (NodeID, a)
-
 type Edge b = (NodeID, NodeID, b)
-
 type Links b = [(b, NodeID)]
 
 -- | Links to the node, the node, links from the node
@@ -17,7 +16,7 @@ instance (Show a, Show b) => Show (Graph a b) where
                                show graph
     show EmptyGraph = "EmptyGraph"
 instance Functor (Graph blah) where
-    fmap f EmptyGraph = EmptyGraph
+    fmap _ EmptyGraph = EmptyGraph
     fmap f ((linksA, node, linksB) :&: graph) = 
         (mapLinks linksA, node, mapLinks linksB) :&: fmap f graph 
         where mapLinks = map (\(a, b) -> (f a, b)) 
@@ -49,7 +48,7 @@ removeNode x graph@(context@(_, node, _) :&: g)
 
 insertEdge :: Edge b -> Graph a b -> Graph a b
 insertEdge _ EmptyGraph = EmptyGraph
-insertEdge edge graph@(context :&: g) =
+insertEdge edge (context :&: g) =
     addEdgeToContext edge context :&: insertEdge edge g
 
 insertEdges :: [Edge b] -> Graph a b -> Graph a b
@@ -69,8 +68,10 @@ addEdgeToContext (n1, n2, label) (linksA, node, linksB)
 fromLists :: [Node a] -> [Edge b] -> Graph a b
 fromLists nodes edges = insertEdges edges $ insertNodes nodes EmptyGraph
 
+-- This isn't good
 nodeToContext :: NodeID -> Graph a b -> Context a b
-nodeToContext node (context@(_, n,_) :&: graph) 
+nodeToContext _ EmptyGraph = error "Node not in graph!!!"
+nodeToContext node (context@(_, n,_) :&: graph)
     | node == fst n = context
     | otherwise     = nodeToContext node graph
 
@@ -85,6 +86,7 @@ out :: Graph a b -> NodeID -> [Edge b]
 out graph n = linksToEdges n graph
 
 nodes :: Graph a b -> [NodeID]
+nodes EmptyGraph = []
 nodes ((_, (id, _),_) :&: graph) = id : nodes graph
 
 label :: Graph a b -> NodeID -> a
