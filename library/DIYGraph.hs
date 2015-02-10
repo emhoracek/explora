@@ -42,29 +42,14 @@ findNode x ((_, (n, _), _) :&: graph)
     | x == n    = True
     | otherwise = findNode x graph 
 
--- also needs to look through and see what nodes link to it
--- and remove those too
 removeNode :: (Eq a) => Node a -> Graph a b -> Graph a b
 removeNode _ EmptyGraph = EmptyGraph
-removeNode x graph@(context@(_, node, _) :&: g) 
-    | x == node          = g 
-    | findNode (fst x) g = context :&: removeNode x g
-    | otherwise          = graph
-
-removeNode' :: (Eq a) => Node a -> Graph a b -> Graph a b
-removeNode' _ EmptyGraph = EmptyGraph
-removeNode' x graph@(context@(linksIn, node, linksOut) :&: g) 
-    | x == node          = removeNode' x g
-    | findNode (fst x) g = (removeLinks linksIn, node, removeLinks linksOut) 
-                            :&: removeNode' x g
-    | otherwise          = graph 
+removeNode x graph@(context@(linksIn, node, linksOut) :&: g) 
+    | x == node  = removeNode x g
+    | otherwise  = (removeLinks linksIn, node, removeLinks linksOut) 
+                        :&: removeNode x g
     where noMatchID link = fst x /= snd link
           removeLinks = filter noMatchID
-
---removeLinks :: (Eq a) => Node a -> [Link b] -> [Link b]
---removeLinks n = filter (\x -> (fst n) != (snd x)) link
-
-
 
 insertEdge :: Edge b -> Graph a b -> Graph a b
 insertEdge _ EmptyGraph = EmptyGraph
