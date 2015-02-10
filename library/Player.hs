@@ -20,13 +20,13 @@ makePlayer graph = Player { currentPlace = head $ nodes graph,
                                           ("Alive", "True"), ("Won", "False"), 
                                           ("score", "0")]}
 
-changePlayer :: String -> (String -> String) -> Player -> Player
-changePlayer whichProp how player =
-        let f = adjust how whichProp in
-            player { playerInfo = f $ playerInfo player }
+changePlayer :: String -> String -> Player -> Player
+changePlayer property value player =
+        let f = adjust (const value) property in
+        player { playerInfo = f $ playerInfo player }
 
 killPlayer :: Player -> Player
-killPlayer =  changePlayer "Alive" (const "False")
+killPlayer =  changePlayer "Alive" "False"
 
 movePlayer :: Int -> Player ->  Player
 movePlayer node player = player { currentPlace = node }
