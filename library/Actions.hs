@@ -27,7 +27,6 @@ tryAction ("look", "") game = Okay game (look game)
 tryAction ("examine", string) game = examine string game
 tryAction _ _  = Impossible "You can't do that."
 
-
 getPlace :: Game -> Place
 getPlace game = label (mapGraph game) (currentPlace $ player game) 
 
@@ -36,6 +35,9 @@ knownItems game = (playerInventory $ player game) ++ (inventory $ getPlace game)
 
 findItem :: String -> [Item] -> Maybe Item
 findItem str = find (\x -> itemName x == str) 
+
+maybeItem :: String -> Game -> Maybe Item
+maybeItem string game = findItem string (knownItems game)
 
 go :: Direction -> Game -> Response
 go dir game =
@@ -51,9 +53,6 @@ look game  =
         graph = mapGraph game in 
     name (label graph node) ++ "\n" ++ 
         description (label graph node)
-
-maybeItem :: String -> Game -> Maybe Item
-maybeItem string game = findItem string (knownItems game)
 
 examine :: String -> Game -> Response
 examine "self" game = Okay game "As lovely as ever."
@@ -71,8 +70,7 @@ takeItem string game =
         changeGame item = Game { player = changePlayer item,
                              mapGraph = changeGraph item,
                              dictionary = dictionary game }
-        changeGraph item = insertNode (currentPlace $ player game, changePlace item)  $
-                           removeNode (currentNode, curPlace) (mapGraph game)
+        changeGraph item = changeNode (currentPlace $ player game, changePlace item) (mapGraph game)
         changePlace item = curPlace { 
             inventory = delete item (inventory curPlace) }
         changePlayer item = (player game) { playerInventory = newPInv item }

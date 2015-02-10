@@ -81,6 +81,16 @@ spec =  do
             it "returns an empty graph" $
                 removeNode (12, "yo") EmptyGraph `shouldBe` (EmptyGraph :: Graph String Int) 
 
+    describe "changeNode" $ do
+        context "node in graph" $
+            it "changes that node to the new node" $
+                changeNode (1, "hey") sampleGraph2 `shouldBe`
+                    ([], (1, "hey"), []) :&: EmptyGraph
+        context "node not in graph" $
+            it "should return the same graph" $
+                changeNode (2, "goodbye") sampleGraph2 `shouldBe`
+                    sampleGraph2
+
     describe "insertEdge" $ do
         context "empty graph" $
             it "returns an empty graph" $
@@ -107,7 +117,7 @@ spec =  do
             linksToEdges 1 longerGraph `shouldBe`
                 [(1, 2, "mother of")]
 
-    describe "nodeToContect" $ do
+    describe "nodeToContext" $ do
         context "existing node" $
             it "returns the context" $
                 nodeToContext 2 longerGraph `shouldBe`

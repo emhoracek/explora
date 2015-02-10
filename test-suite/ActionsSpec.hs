@@ -71,7 +71,7 @@ spec = do
                 examine "elephant in the room" itemsGame `shouldBe`
                     Impossible "You don't see any \"elephant in the room\" here." 
 
-    context "take" $
+    context "takeItem" $
         it "moves an item from the place inventory to the player's" $
             takeItem "box of hair dye" itemsGame `shouldBe`
-                Okay sampleGame "Taken." 
+                Okay itemsGameChanged "Taken." 

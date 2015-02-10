@@ -51,6 +51,14 @@ removeNode x graph@(context@(linksIn, node, linksOut) :&: g)
     where noMatchID link = fst x /= snd link
           removeLinks = filter noMatchID
 
+-- This takes a node and a graph and returns a new graph.
+changeNode :: (Eq a) => Node a -> Graph a b -> Graph a b
+changeNode _ EmptyGraph = EmptyGraph
+changeNode x graph@(context@(linksIn, node, linksOut) :&: g) 
+    | fst x == fst node = (linksIn, x, linksOut) :&: g
+    | otherwise = context :&: changeNode x g 
+
+
 insertEdge :: Edge b -> Graph a b -> Graph a b
 insertEdge _ EmptyGraph = EmptyGraph
 insertEdge edge (context :&: g) =
