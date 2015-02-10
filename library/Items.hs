@@ -1,12 +1,10 @@
 module Items where
 
-import Data.Map (Map(..), fromList, adjust, lookup)
-import Graph
-import DIYGraph
-import Places
+import Data.Map (adjust)
 import Properties
 
-data Item = Item { itemInfo :: Properties
+data Item = Item { itemName :: String,
+                   itemInfo :: Properties
                    } deriving (Eq, Show)
 
 changeItem :: String -> (String -> String) -> Item -> Item

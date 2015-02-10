@@ -1,12 +1,18 @@
 module Actions where
 
-import DIYGraph   
+import DIYGraph 
 import Game
 import Graph
+import Items
 import Places
 import Player
+import Properties
 import Response
 import Input
+
+import Data.Map (lookup)
+import Data.List (find, delete)
+import Data.Maybe (fromMaybe)
 
 -- Checks if it's possible to verb that noun.
 validateAction :: Either Response Input -> Game -> Response
@@ -18,7 +24,18 @@ tryAction :: Input -> Game -> Response
 tryAction ("go", direction) game = go direction game
 tryAction ("kill", "player") game = Okay game { player = killPlayer (player game) } "You have died."
 tryAction ("look", "") game = Okay game (look game)
+tryAction ("examine", string) game = examine string game
 tryAction _ _  = Impossible "You can't do that."
+
+
+getPlace :: Game -> Place
+getPlace game = label (mapGraph game) (currentPlace $ player game) 
+
+knownItems :: Game -> [Item]
+knownItems game = (playerInventory $ player game) ++ (inventory $ getPlace game)
+
+findItem :: String -> [Item] -> Maybe Item
+findItem str = find (\x -> itemName x == str) 
 
 go :: Direction -> Game -> Response
 go dir game =
@@ -35,3 +52,31 @@ look game  =
     name (label graph node) ++ "\n" ++ 
         description (label graph node)
 
+maybeItem :: String -> Game -> Maybe Item
+maybeItem string game = findItem string (knownItems game)
+
+examine :: String -> Game -> Response
+examine "self" game = Okay game "As lovely as ever."
+examine string game = 
+      let maybeInfo s x = fromMaybe "Oops, no description." 
+            (Data.Map.lookup s (itemInfo x)) in
+      case maybeItem string game of 
+        Just x -> Okay game (maybeInfo "description" x)
+        Nothing -> Impossible $ "You don't see any \"" ++ string ++ "\" here."
+
+takeItem :: String -> Game -> Response
+takeItem string game =
+    let curPlace = getPlace game
+        currentNode = currentPlace $ player game
+        changeGame item = Game { player = changePlayer item,
+                             mapGraph = changeGraph item,
+                             dictionary = dictionary game }
+        changeGraph item = insertNode (currentPlace $ player game, changePlace item)  $
+                           removeNode (currentNode, curPlace) (mapGraph game)
+        changePlace item = curPlace { 
+            inventory = delete item (inventory curPlace) }
+        changePlayer item = (player game) { playerInventory = newPInv item }
+        newPInv item = item : playerInventory (player game) in
+    case maybeItem string game of 
+        Just x -> Okay (changeGame x) "Taken."
+        Nothing -> Impossible "You don't see that."

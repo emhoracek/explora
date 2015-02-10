@@ -1,16 +1,19 @@
 module DIYGraph where
 
--- kinda copying fgl
+-- copying fgl
 
 type NodeID = Int
 type Node a = (NodeID, a)
 type Edge b = (NodeID, NodeID, b)
 type Links b = [(b, NodeID)]
 
--- | Links to the node, the node, links from the node
+-- a context is the links to the node, the node, links from the node
 type Context a b = (Links b, Node a, Links b)
 
+-- a graph is either empty or a context and a graph
 data Graph a b = EmptyGraph | (:&:) (Context a b) (Graph a b) deriving Eq
+
+
 instance (Show a, Show b) => Show (Graph a b) where
     show (context :&: graph) = show context ++ " & " ++
                                show graph
@@ -20,7 +23,7 @@ instance Functor (Graph blah) where
     fmap f ((linksA, node, linksB) :&: graph) = 
         (mapLinks linksA, node, mapLinks linksB) :&: fmap f graph 
         where mapLinks = map (\(a, b) -> (f a, b)) 
--- I only added this to learn about functors
+-- I only added this to learn about functors and it kinda sucks???
 
 singleton :: Node a -> Graph a ()
 singleton node = ([], node, []) :&: EmptyGraph
@@ -39,6 +42,8 @@ findNode x ((_, (n, _), _) :&: graph)
     | x == n    = True
     | otherwise = findNode x graph 
 
+-- also needs to look through and see what nodes link to it
+-- and remove those too
 removeNode :: (Eq a) => Node a -> Graph a b -> Graph a b
 removeNode _ EmptyGraph = EmptyGraph
 removeNode x graph@(context@(_, node, _) :&: g) 
@@ -46,16 +51,28 @@ removeNode x graph@(context@(_, node, _) :&: g)
     | findNode (fst x) g = context :&: removeNode x g
     | otherwise          = graph
 
+removeNode' :: (Eq a) => Node a -> Graph a b -> Graph a b
+removeNode' _ EmptyGraph = EmptyGraph
+removeNode' x graph@(context@(linksIn, node, linksOut) :&: g) 
+    | x == node          = removeNode' x g
+    | findNode (fst x) g = (removeLinks linksIn, node, removeLinks linksOut) 
+                            :&: removeNode' x g
+    | otherwise          = graph 
+    where noMatchID link = fst x /= snd link
+          removeLinks = filter noMatchID
+
+--removeLinks :: (Eq a) => Node a -> [Link b] -> [Link b]
+--removeLinks n = filter (\x -> (fst n) != (snd x)) link
+
+
+
 insertEdge :: Edge b -> Graph a b -> Graph a b
 insertEdge _ EmptyGraph = EmptyGraph
 insertEdge edge (context :&: g) =
     addEdgeToContext edge context :&: insertEdge edge g
 
 insertEdges :: [Edge b] -> Graph a b -> Graph a b
---insertEdges _ EmptyGraph = EmptyGraph
---insertEdges [] graph = graph
 insertEdges edges graph = foldl (flip insertEdge) graph edges 
---    insertEdges edges (insertEdge edge graph)
 
 addEdgeToContext :: Edge b -> Context a b -> Context a b 
 addEdgeToContext (n1, n2, label) (linksA, node, linksB)

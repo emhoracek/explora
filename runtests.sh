@@ -1,13 +1,8 @@
 #!/bin/zsh
 
-echo "Compiling test suite with HPC."
-ghc -fhpc -itest-suite/ -itest-suite/librarySpec -itest-suite/executableSpec -iexecutable -ilibrary test-suite/Spec.hs
+STR="Spec"
 
-echo "Running test suite."
-./test-suite/Spec
+echo "${1+$STR}"
 
-echo "\nHPC tests:"
-hpc report Spec.tix
-
-echo "\nRemoving tix file."
-rm Spec.tix
+echo "Running tests: "
+runhaskell -itest-suite -ilibrary test-suite/${1+$STR}.hs

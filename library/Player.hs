@@ -2,12 +2,13 @@ module Player where
 
 import Data.Map (Map, fromList, adjust)
 import DIYGraph
+import Items
 import Places
 import Properties
 
 data Player = Player { 
                 currentPlace :: NodeID,
-                playerInventory :: [String],
+                playerInventory :: [Item],
                 playerInfo :: Properties
                 } deriving (Eq, Show)
 

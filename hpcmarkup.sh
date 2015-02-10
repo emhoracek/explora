@@ -7,7 +7,7 @@ echo "Running test suite."
 ./test-suite/Spec
 
 echo "\nHPC tests:"
-hpc markup --exclude="test-suite/*"  Spec.tix
+hpc markup Spec.tix
 
 echo "\nCopying HTML files into folder."
 mv *.html markup

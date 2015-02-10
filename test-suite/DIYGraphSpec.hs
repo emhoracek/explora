@@ -72,7 +72,7 @@ spec =  do
         context "larger graph" $
             it "removes node and context from graph" $
                 removeNode (2, "Libby") longerGraph `shouldBe`
-                    (([("mother", 2)], (1, "Marilyn"), [("mother of",2)]) :&: EmptyGraph)
+                    (([], (1, "Marilyn"), []) :&: EmptyGraph)
         context "node not in graph" $
             it "returns the same graph" $
                 removeNode (12, "yo") sampleGraph `shouldBe`

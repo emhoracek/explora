@@ -2,11 +2,13 @@ module ActionsSpec where
 
 import Test.Hspec
 import Actions
+import Items
 import Player
 import Samples
 import Response
 import Game
 
+import SampleItems
 spec = do
     describe "validateAction" $ do
         it "says okay if good direction from node" $
@@ -31,7 +33,11 @@ spec = do
         context "look" $
             it "same world and description" $
                 tryAction ("look", "") sampleGame `shouldBe`
-                    Okay sampleGame (look sampleGame) 
+                    Okay sampleGame (look sampleGame)
+        context "examine" $
+            it "shows a description of the item" $
+                tryAction ("examine", "box of hair dye") itemsGame `shouldBe`
+                    Okay itemsGame "You can change the color of your hair with this." 
         context "impossible action" $
             it "responds saying it's impossible" $
                 tryAction ("take", "moon") sampleGame `shouldBe`
@@ -50,3 +56,22 @@ spec = do
         it "give a description of the place" $
             look sampleGame `shouldBe`
                 "A place\ndescription"
+
+    describe "examine" $ do
+        context "self" $
+            it "gives a description of the player" $ 
+                examine "self" itemsGame `shouldBe`
+                    Okay itemsGame "As lovely as ever."
+        context "box of hair dye" $
+            it "give a description of the hair dye" $
+                examine "box of hair dye" itemsGame `shouldBe`
+                    Okay itemsGame "You can change the color of your hair with this."
+        context "something that's not there" $
+            it "says you can't see that" $
+                examine "elephant in the room" itemsGame `shouldBe`
+                    Impossible "You don't see any \"elephant in the room\" here." 
+
+    context "take" $
+        it "moves an item from the place inventory to the player's" $
+            takeItem "box of hair dye" itemsGame `shouldBe`
+                Okay sampleGame "Taken." 
