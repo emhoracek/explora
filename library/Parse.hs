@@ -4,9 +4,12 @@
 
 module Parse where
 
+import Data.Map (fromList)
+
 import Text.ParserCombinators.Parsec
 import Places
 import Dictionary
+import Items
 
 listOfDefinitions :: Exit -> [(Direction, [UserInput])]
 listOfDefinitions (Exit dir syn _) = [(dir, syn)]
@@ -23,12 +26,13 @@ parsePlace = do
     char '\n'
     skipMany space
     desc <- validPlaceString
+    items <- listOfItems
     action <- listOfActions
     char '\n'
     skipMany space
     exits <- listOfExits
     skipMany (char '\n')
-    return $ Place (read num) name desc [] action exits
+    return $ Place (read num) name desc items action exits
 
 validPlaceString :: Parser String
 validPlaceString = many (noneOf "\n*")
@@ -44,6 +48,23 @@ parseAction = do
     skipMany space
     string <- validPlaceString
     return string
+
+parseItem :: Parser [Item]
+parseItem = do
+    char '\n'
+    skipMany space
+    char '#'
+    skipMany space
+    string <- validExitString
+    skipMany space
+    char ':'
+    skipMany space
+    desc <- validPlaceString
+    return [Item { itemName = string,
+                   itemInfo = fromList [("description", desc)] }]
+
+listOfItems :: Parser [Item]
+listOfItems = option [] $ try parseItem
 
 -- what about multiword synonyms? are those okay?
 validExitString :: Parser String
@@ -83,3 +104,5 @@ parseDictionary file = case parsePlaces file of
     Left x -> Left x
     Right x -> Right $ toDictionary x
 
+parseItemsTest :: String -> Either ParseError [Item]
+parseItemsTest = parse listOfItems "oops"

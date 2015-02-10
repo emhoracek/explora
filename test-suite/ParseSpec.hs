@@ -3,9 +3,15 @@ module ParseSpec (spec) where
 import Test.Hspec
 import Parse
 import Samples
+import SampleItems
 
 spec :: Spec
 spec =  do
+    describe "parseItems" $
+        it "changes a string to a list of items" $
+            parseItemsTest itemString `shouldBe`
+                Right sampleInventory
+
     describe "parseExits" $ do
         it "changes a file/string to a list of exits" $
             parseExits sampleMapExitsGood `shouldBe`

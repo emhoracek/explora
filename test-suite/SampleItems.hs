@@ -16,9 +16,13 @@ import Text.ParserCombinators.Parsec.Error(ParseError(..), Message, newErrorMess
 import Samples 
 import Text.Parsec.Pos(SourcePos, initialPos)
 
+itemString = "\n# item: The description of the item."
+
+sampleInventory = [ Item { itemName = "item",
+                           itemInfo = fromList [("description", "The description of the item.")]} ]
+
 itemsDefinitions :: Dictionary 
 itemsDefinitions = Map.fromList [ ("s", "South"), ("n", "North"), ("south", "South"), ("north", "North") ]
-
 
 hairDye = Item { itemName = "box of hair dye",
                  itemInfo = fromList [("description", "You can change the color of your hair with this.")] }

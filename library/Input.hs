@@ -30,6 +30,8 @@ validateInput string dict
     | stripExtraSpaces string == "" = Left NoInput 
     | isADirection string dict      = toDirection string dict
     | firstWord == "go"             = toDirection rest dict
+    | firstWord == "look"           = Right ("look", "")
+    | firstWord == "examine"        = Right ("examine", rest)
     | string == "kill player"       = Right ("kill", "player")
     | otherwise                     = Left $ BadInput string 
     where firstWord = stripExtraSpaces $ head $ words string
