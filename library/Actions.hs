@@ -11,7 +11,7 @@ import Response
 import Input
 
 import Data.Map (lookup)
-import Data.List (find, delete)
+import Data.List (find, delete, intercalate)
 import Data.Maybe (fromMaybe)
 
 -- Checks if it's possible to verb that noun.
@@ -25,6 +25,8 @@ tryAction ("go", direction) game = go direction game
 tryAction ("kill", "player") game = Okay game { player = killPlayer (player game) } "You have died."
 tryAction ("look", "") game = Okay game (look game)
 tryAction ("examine", string) game = examine string game
+tryAction ("take", string) game = takeItem string game
+tryAction ("inventory", "") game = listInventory game
 tryAction _ _  = Impossible "You can't do that."
 
 getPlace :: Game -> Place
@@ -50,9 +52,18 @@ go dir game =
 look :: Game -> String
 look game  =
     let node = currentPlace $ player game 
-        graph = mapGraph game in 
+        graph = mapGraph game
+        i = map show (inventory $ getPlace game)
+        inventoryString = 
+            case length i of 
+                0 -> ""
+                1 -> "There is a " ++ head i ++ " here.\n"
+                otherwise -> "There are " ++ intercalate " and " i ++ " here.\n"
+    in
     name (label graph node) ++ "\n" ++ 
-        description (label graph node)
+        description (label graph node) ++ "\n" ++
+        inventoryString
+    
 
 examine :: String -> Game -> Response
 examine "self" game = Okay game "As lovely as ever."
@@ -78,3 +89,7 @@ takeItem string game =
     case maybeItem string game of 
         Just x -> Okay (changeGame x) "Taken."
         Nothing -> Impossible "You don't see that."
+
+listInventory :: Game -> Response
+listInventory game = Okay game inventoryString
+    where inventoryString = intercalate "\n" (map show (playerInventory $ player game))

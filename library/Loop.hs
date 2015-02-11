@@ -30,7 +30,7 @@ loop game = do
         else putStrLn $ look newWorld
     if getInfo "Alive" (playerInfo $ player nextWorld) == Just "True" 
         then loop nextWorld 
-        else putStrLn $ look newWorld  
+        else return ()
 
 -- This SUCKS
 entryAction :: String -> Game -> IO Game
