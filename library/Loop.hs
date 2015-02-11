@@ -9,11 +9,15 @@ import Properties
 import Response
 import Game
 
+startGame :: Game -> IO ()
+startGame game = do
+    putStrLn $ look game
+    loop game
+
 -- Game loop. Show description of current state, get input from player,
 -- determine correct response and display, step world if possible, and loop.
 loop :: Game -> IO ()
 loop game = do
-    putStrLn $ look game 
     inputDir <- getLine
     let input = validateInput inputDir (dictionary game)
     let response = validateAction input game 
@@ -22,6 +26,8 @@ loop game = do
     let todo = onEntry $ label (mapGraph newWorld) (currentPlace $ player newWorld)
     nextWorld <- if null todo then return newWorld
                         else entryAction todo newWorld
+    if nextWorld == game then return ()
+        else putStrLn $ look newWorld
     if getInfo "Alive" (playerInfo $ player nextWorld) == Just "True" 
         then loop nextWorld 
         else putStrLn $ look newWorld  

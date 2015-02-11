@@ -16,4 +16,4 @@ main = do
     file <- getLine
     f <- if file == "" then readFile exampleFile else readFile file
     let game = initGame f
-    either print loop game
+    either print startGame game
