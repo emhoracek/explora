@@ -61,7 +61,8 @@ parseItem = do
     skipMany space
     desc <- validPlaceString
     return [Item { itemName = string,
-                   itemInfo = fromList [("description", desc)] }]
+                   itemInfo = fromList [("description", desc)],
+                   itemActions = [[]] }]
 
 listOfItems :: Parser [Item]
 listOfItems = option [] $ try parseItem

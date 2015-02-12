@@ -26,20 +26,24 @@ tryAction ("kill", "player") game = Okay game { player = killPlayer (player game
 tryAction ("look", "") game = Okay game (look game)
 tryAction ("examine", string) game = examine string game
 tryAction ("take", string) game = takeItem string game
+tryAction ("drop", string) game = dropItem string game
 tryAction ("inventory", "") game = listInventory game
 tryAction _ _  = Impossible "You can't do that."
 
 getPlace :: Game -> Place
 getPlace game = label (mapGraph game) (currentPlace $ player game) 
 
+-- Searching all items
+
+-- hlint has no idea what it's talking about here, this is the best way to write this,
+-- F. U. hlint
 knownItems :: Game -> [Item]
 knownItems game = (playerInventory $ player game) ++ (inventory $ getPlace game)
 
-findItem :: String -> [Item] -> Maybe Item
-findItem str = find (\x -> itemName x == str) 
-
 maybeItem :: String -> Game -> Maybe Item
-maybeItem string game = findItem string (knownItems game)
+maybeItem string game = find (\x -> itemName x == string) (knownItems game)
+
+-- Actions
 
 go :: Direction -> Game -> Response
 go dir game =
@@ -57,13 +61,12 @@ look game  =
         inventoryString = 
             case length i of 
                 0 -> ""
-                1 -> "There is a " ++ head i ++ " here.\n"
-                otherwise -> "There are " ++ intercalate " and " i ++ " here.\n"
+                1 -> "\nThere is a " ++ head i ++ " here."
+                otherwise -> "\nThere are " ++ intercalate " and " i ++ " here."
     in
     name (label graph node) ++ "\n" ++ 
-        description (label graph node) ++ "\n" ++
+        description (label graph node) ++ 
         inventoryString
-    
 
 examine :: String -> Game -> Response
 examine "self" game = Okay game "As lovely as ever."
@@ -74,21 +77,32 @@ examine string game =
         Just x -> Okay game (maybeInfo "description" x)
         Nothing -> Impossible $ "You don't see any \"" ++ string ++ "\" here."
 
+changeGamePlayer :: (Player -> Player) -> Game -> Game
+changeGamePlayer f g = g { player = f (player g) }
+
+changeGameGraph :: (Place -> Place) -> Game -> Game
+changeGameGraph f g = g { mapGraph = newGraph }
+    where 
+        newGraph = changeNode (currentPlace $ player g, changedPlace) (mapGraph g)
+        changedPlace = f (getPlace g)
+
 takeItem :: String -> Game -> Response
 takeItem string game =
-    let curPlace = getPlace game
-        currentNode = currentPlace $ player game
-        changeGame item = Game { player = changePlayer item,
-                             mapGraph = changeGraph item,
-                             dictionary = dictionary game }
-        changeGraph item = changeNode (currentPlace $ player game, changePlace item) (mapGraph game)
-        changePlace item = curPlace { 
-            inventory = delete item (inventory curPlace) }
-        changePlayer item = (player game) { playerInventory = newPInv item }
-        newPInv item = item : playerInventory (player game) in
     case maybeItem string game of 
         Just x -> Okay (changeGame x) "Taken."
         Nothing -> Impossible "You don't see that."
+    where
+        changeGame i = changeGamePlayer (addItem i) 
+                       $ changeGameGraph (removeItem i) game
+
+dropItem :: String -> Game -> Response
+dropItem string game = 
+    case findItem string (player game) of
+        Just x -> Okay (changeGame x) "Dropped."
+        Nothing -> Impossible "You aren't carrying that."
+    where 
+        changeGame i = changeGamePlayer (removeItem i)
+                       $ changeGameGraph (addItem i) game
 
 listInventory :: Game -> Response
 listInventory game = Okay game inventoryString

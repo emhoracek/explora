@@ -32,7 +32,8 @@ validateInput string dict
     | firstWord == "go"             = toDirection rest dict
     | firstWord == "look"           = Right ("look", "")
     | firstWord == "examine"        = Right ("examine", rest)
-    | firstWord == "take"          =  Right ("take", rest)
+    | firstWord == "take"           = Right ("take", rest)
+    | firstWord == "drop"           = Right ("drop", rest)
     | string == "kill player"       = Right ("kill", "player")
     | string == "inventory"         = Right ("inventory", "")
     | otherwise                     = Left $ BadInput string 

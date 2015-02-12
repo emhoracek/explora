@@ -3,12 +3,13 @@
 -> East (e): 3, South (s): 2, xyzzy: 8
 2. The Woods
     You are in a green wood outside a cave. You can enter the cave by going north. To the east you can see a house.
+# rock: A small, smooth river rock.
 -> North (n): 1, East: 4
 3. Darkness
     It is pitch black. You are likely to be eaten by a grue. (Not really.)
 -> Down (d): 7, West (w): 1
 4. A House
-    You are outside a small, quaint cottage in the woods. It's not your house, it's locked, and you can't get in. The woods continue to the east and west, and a road leads south.
+    You are outside a small, quaint cottage in the woods. It's not your house, it's locked, and you can't get in. The woods continue to the east and west, and a road leads north and south.
 -> West: 2, East: 6, South: 5, North: 16
 5. A Dead End
     The road is a dead end in the middle of the woods. Kind of creepy. Wow. North is a house.
@@ -47,3 +48,4 @@
 -> North: 15, South: 4
 17. The Afterlife
      You leap of the cliff and land... not on hard ground, but soft fluffy clouds. Angels sing and play harps and frolic as the flit to and fro. You shrug and join them.
+* kill player

@@ -1,6 +1,7 @@
 module Player where
 
 import Data.Map (Map, fromList, adjust)
+import Data.List (find)
 import DIYGraph
 import Items
 import Places
@@ -11,6 +12,12 @@ data Player = Player {
                 playerInventory :: [Item],
                 playerInfo :: Properties
                 } deriving (Eq, Show)
+instance Inv Player where
+    findItem str p = find (\x -> itemName x == str) (playerInventory p)
+    removeItem i p= p { playerInventory = filter (/= i) (playerInventory p)}
+    addItem i p= p { playerInventory = i : playerInventory p }
+
+
 
 -- Player starts with no inventory at first place in graph.
 makePlayer :: Graph Place Direction -> Player

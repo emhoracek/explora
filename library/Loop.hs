@@ -18,6 +18,7 @@ startGame game = do
 -- determine correct response and display, step world if possible, and loop.
 loop :: Game -> IO ()
 loop game = do
+    putStrLn ""
     inputDir <- getLine
     let input = validateInput inputDir (dictionary game)
     let response = validateAction input game 
@@ -27,7 +28,7 @@ loop game = do
     nextWorld <- if null todo then return newWorld
                         else entryAction todo newWorld
     if nextWorld == game then return ()
-        else putStrLn $ look newWorld
+        else putStrLn $ look nextWorld
     if getInfo "Alive" (playerInfo $ player nextWorld) == Just "True" 
         then loop nextWorld 
         else return ()

@@ -1,5 +1,7 @@
 module DIYGraph where
 
+import Control.Arrow (first)
+
 -- copying fgl
 
 type NodeID = Int
@@ -22,8 +24,8 @@ instance Functor (Graph blah) where
     fmap _ EmptyGraph = EmptyGraph
     fmap f ((linksA, node, linksB) :&: graph) = 
         (mapLinks linksA, node, mapLinks linksB) :&: fmap f graph 
-        where mapLinks = map (\(a, b) -> (f a, b)) 
--- I only added this to learn about functors and it kinda sucks???
+        where mapLinks = map (first f) 
+-- I only added this to learn about functors and I think it kinda sucks???
 
 singleton :: Node a -> Graph a ()
 singleton node = ([], node, []) :&: EmptyGraph
@@ -51,7 +53,8 @@ removeNode x graph@(context@(linksIn, node, linksOut) :&: g)
     where noMatchID link = fst x /= snd link
           removeLinks = filter noMatchID
 
--- This takes a node and a graph and returns a new graph.
+-- This takes a node and a graph and returns a new graph with
+-- that node in the place of whatever node had the same ID
 changeNode :: (Eq a) => Node a -> Graph a b -> Graph a b
 changeNode _ EmptyGraph = EmptyGraph
 changeNode x graph@(context@(linksIn, node, linksOut) :&: g) 

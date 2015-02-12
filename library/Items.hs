@@ -3,11 +3,19 @@ module Items where
 import Data.Map (adjust)
 import Properties
 
+
 data Item = Item { itemName :: String,
-                   itemInfo :: Properties
+                   itemInfo :: Properties,
+                   itemActions :: [String]
                    } deriving (Eq)
 instance Show Item where
-    show (Item name info) = name
+    show (Item name info actions) = name
+
+
+class Inv a where
+    findItem :: String -> a -> Maybe Item
+    removeItem :: Item -> a -> a 
+    addItem :: Item -> a -> a
 
 
 changeItem :: String -> (String -> String) -> Item -> Item

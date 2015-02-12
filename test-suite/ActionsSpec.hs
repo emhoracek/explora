@@ -41,7 +41,7 @@ spec = do
         context "impossible action" $
             it "responds saying it's impossible" $
                 tryAction ("take", "moon") sampleGame `shouldBe`
-                    Impossible "You can't do that."
+                    Impossible "You don't see that."
 
     describe "go" $ do
         context "good direction" $
@@ -55,7 +55,7 @@ spec = do
     describe "look" $
         it "give a description of the place" $
             look sampleGame `shouldBe`
-                "A place\ndescription"
+                "A place\ndescription\n"
 
     describe "examine" $ do
         context "self" $
@@ -74,4 +74,14 @@ spec = do
     context "takeItem" $
         it "moves an item from the place inventory to the player's" $
             takeItem "box of hair dye" itemsGame `shouldBe`
-                Okay itemsGameChanged "Taken." 
+                Okay itemsGameChanged "Taken."
+
+    context "dropItem" $
+        it "moves an item from the player's inventory to the current place" $
+            dropItem "box of hair dye" itemsGameChanged `shouldBe`
+                Okay itemsGame "Dropped."
+
+    context "useItem" $
+        it "uses an item in the way described by the item's action map" $
+            useItem "box of hair dye" itemsGameChanged `shouldBe`
+                Okay itemsGameWithAddedPink "You have pink hair now." 

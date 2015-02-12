@@ -4,7 +4,11 @@
 -> South (s): 2, East (e): 3
 2. A room with a shimmering door
     This room is unremarkable except for a shimmering door to the east. There's a more normal door on the north wall.
--> East: 2, North (n): 1
+-> East: 5, North (n): 1
+5. Wormhole
+    As you step through the door, you hear a "whoosing" sound and feel momentarily dizzy. Colors and lights fly past, and then...
+* go west
+-> West: 2
 3. A room with a bottomless pit
     There is a huge hole in the floor of this room. You could easily fall in if you go further east!
 -> West (w): 1, East: 4

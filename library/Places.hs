@@ -1,5 +1,6 @@
 module Places where
 
+import Data.List (find)
 import Items
 
 data Place =  Place { num          :: Int
@@ -14,6 +15,11 @@ instance Show Place where
                  description place ++ "\n" ++
                  show (inventory place) ++ 
                  show (exits place)
+instance Inv Place where
+    findItem str p = find (\x -> itemName x == str) (inventory p)
+    removeItem i p = p { inventory = filter (/= i) (inventory p)}
+    addItem i p = p { inventory = i : inventory p }
+
 
 defaultPlace :: Place
 defaultPlace = Place 1 "A place" "Description of the place." [] [] [defaultExit]
