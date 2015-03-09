@@ -41,7 +41,7 @@ spec = do
         context "impossible action" $
             it "responds saying it's impossible" $
                 tryAction ("take", "moon") sampleGame `shouldBe`
-                    Impossible "You can't do that."
+                    Impossible "You can't see any moon."
 
     describe "go" $ do
         context "good direction" $
@@ -55,7 +55,7 @@ spec = do
     describe "look" $
         it "give a description of the place" $
             look sampleGame `shouldBe`
-                "A place\ndescription"
+                "A place\ndescription\n"
 
     describe "examine" $ do
         context "self" $
