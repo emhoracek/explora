@@ -41,7 +41,7 @@ spec = do
         context "impossible action" $
             it "responds saying it's impossible" $
                 tryAction ("take", "moon") sampleGame `shouldBe`
-                    Impossible "You don't see that."
+                    Impossible "You can't see any moon."
 
     describe "go" $ do
         context "good direction" $
@@ -81,7 +81,3 @@ spec = do
             dropItem "box of hair dye" itemsGameChanged `shouldBe`
                 Okay itemsGame "Dropped."
 
-    context "useItem" $
-        it "uses an item in the way described by the item's action map" $
-            useItem "box of hair dye" itemsGameChanged `shouldBe`
-                Okay itemsGameWithAddedPink "You have pink hair now." 

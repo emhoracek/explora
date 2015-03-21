@@ -14,12 +14,13 @@ import Data.Map (lookup)
 import Data.List (find, delete, intercalate)
 import Data.Maybe (fromMaybe)
 
--- Checks if it's possible to verb that noun.
+-- | Checks if it's possible to verb that noun.
 validateAction :: Either Response Input -> Game -> Response
 validateAction input game = case input of
     Left response   -> response
     Right goodInput -> tryAction goodInput game 
 
+-- Ick
 tryAction :: Input -> Game -> Response 
 tryAction ("go", direction) game = go direction game
 tryAction ("kill", "player") game = Okay game { player = killPlayer (player game) } "You have died."
@@ -30,21 +31,21 @@ tryAction ("drop", string) game = dropItem string game
 tryAction ("inventory", "") game = listInventory game
 tryAction _ _  = Impossible "You can't do that."
 
+-- | Shorthand to get current location in the game.
 getPlace :: Game -> Place
 getPlace game = label (mapGraph game) (currentPlace $ player game) 
 
--- Searching all items
-
--- hlint has no idea what it's talking about here, this is the best way to write this,
--- F. U. hlint
+-- | Lists all the items the player can currently access.
 knownItems :: Game -> [Item]
 knownItems game = (playerInventory $ player game) ++ (inventory $ getPlace game)
 
+-- | Shorthand to maybe find an item the player can currently access by its name.
 maybeItem :: String -> Game -> Maybe Item
 maybeItem string game = find (\x -> itemName x == string) (knownItems game)
 
 -- Actions
 
+-- | Game verb: Go in a direction.
 go :: Direction -> Game -> Response
 go dir game =
     let n = currentPlace $ player game in
@@ -52,7 +53,7 @@ go dir game =
         Just newNode -> Okay game { player = movePlayer newNode (player game)} ""
         Nothing      -> Impossible ("You can't go " ++ dir ++ ".")
 
--- Shows description of a new place.
+-- | Game verb: Shows description of a place.
 look :: Game -> String
 look game  =
     let node = currentPlace $ player game 
@@ -68,6 +69,7 @@ look game  =
         description (label graph node) ++ 
         inventoryString
 
+-- | Game verb: Show the description of an item.
 examine :: String -> Game -> Response
 examine "self" game = Okay game "As lovely as ever."
 examine string game = 
@@ -82,15 +84,16 @@ changeGamePlayer f g = g { player = f (player g) }
 
 changeGameGraph :: (Place -> Place) -> Game -> Game
 changeGameGraph f g = g { mapGraph = newGraph }
-    where 
+    where
         newGraph = changeNode (currentPlace $ player g, changedPlace) (mapGraph g)
         changedPlace = f (getPlace g)
 
+-- | Game verb: Take an item from the environment.
 takeItem :: String -> Game -> Response
 takeItem string game =
     case maybeItem string game of 
         Just x -> Okay (changeGame x) "Taken."
-        Nothing -> Impossible "You don't see that."
+        Nothing -> Impossible $ "You can't see any " ++ string ++ "."
     where
         changeGame i = changeGamePlayer (addItem i) 
                        $ changeGameGraph (removeItem i) game
@@ -104,6 +107,7 @@ dropItem string game =
         changeGame i = changeGamePlayer (removeItem i)
                        $ changeGameGraph (addItem i) game
 
+-- | Game verb: Lists the players inventory.
 listInventory :: Game -> Response
 listInventory game = Okay game inventoryString
     where inventoryString = intercalate "\n" (map show (playerInventory $ player game))

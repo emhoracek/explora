@@ -19,17 +19,15 @@ import Text.Parsec.Pos(SourcePos, initialPos)
 itemString = "\n# item: The description of the item."
 
 sampleInventory = [ Item { itemName = "item",
-                           itemInfo = fromList [("description", "The description of the item.")]} ]
+                           itemInfo = fromList [("description", "The description of the item.")],
+                           itemActions = [] } ]
 
 itemsDefinitions :: Dictionary 
 itemsDefinitions = Map.fromList [ ("s", "South"), ("n", "North"), ("south", "South"), ("north", "North") ]
 
 hairDye = Item { itemName = "box of hair dye",
                  itemInfo = fromList [("description", "You can change the color of your hair with this.")],
-                 itemActions = fromList [("use", [ Action "changePlayer" "hair color" "pink", 
-                                                   Action "changePlayer" "description" "You have pink hair now.",
-                                                   Action "delete" "self"],
-                                                 False )] }
+                 itemActions = [] }
 
 itemsPlaces = [ Place 1 "A place" "description" [hairDye] [] [Exit "South" ["s"] 2] ,
                  Place 2 "A place" "description" [] [] [Exit "North" ["n"] 1] ]
@@ -44,7 +42,7 @@ itemsGraphChanged = ( [("North", 2)], (1, head itemsPlacesChanged), [("South", 2
               (([("South", 1)], (2, last itemsPlaces), [("North", 1)]) :&: EmptyGraph)
 
 itemsPlayer :: Player 
-itemsPlayer = makePlayer itemsGraph { playerInfo = fromList [("Alive","True"),("Won","False"),("description","As lovely as ever."),("score","0"), ("hair color", "brown")]}
+itemsPlayer = makePlayer itemsGraph
 
 itemsPlayerChanged :: Player
 itemsPlayerChanged = (makePlayer itemsGraphChanged) { playerInventory = [ hairDye ] }
@@ -58,7 +56,8 @@ itemsGameChanged :: Game
 itemsGameChanged = 
     Game {player = Player {currentPlace = 1, 
                            playerInventory = [Item {itemName = "box of hair dye", 
-                                                itemInfo = fromList [("description","You can change the color of your hair with this.")]}], 
+                                                itemInfo = fromList [("description","You can change the color of your hair with this.")],
+                                                itemActions = []}], 
                            playerInfo = fromList [("Alive","True"),("Won","False"),("description","As lovely as ever."),("score","0"), ("hair color", "brown")]}, 
           mapGraph = itemsGraphChanged, 
           dictionary = itemsDefinitions }

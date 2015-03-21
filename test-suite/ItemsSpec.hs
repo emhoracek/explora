@@ -9,6 +9,6 @@ spec = do
     describe "changeItem" $
         it "changes something about the item" $
             changeItem "open" (const "closed")
-                Item { itemName = "box", itemInfo = fromList [("open", "open")] } 
+                Item { itemName = "box", itemInfo = fromList [("open", "open")], itemActions=[]} 
             `shouldBe` 
-                Item { itemName = "box", itemInfo = fromList [("open", "closed")] } 
+                Item { itemName = "box", itemInfo = fromList [("open", "closed")], itemActions=[]}
