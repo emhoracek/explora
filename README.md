@@ -17,9 +17,17 @@ cabal install
 playing a game
 --------------
 
-After installing, starting `explora` inside the explora folder then pressing enter will open the example game. 
+```(sh)
+explora
+```
 
-Type directions or instructions like "south", "east", "north" or "west" to explore the map. There are also secret commands (try "xyzzy"!). 
+will start Explora.
+
+The engine will ask what game you want to play. You can type any path relative to the directory you're currently in. So, if you start Explora in the same directory as your game, you can simply type the name of your game file.
+
+Want to try an example game? If you start Explora inside the root "explora" folder, leave the space blank, and just hit Enter, the main example game will start.
+
+To play, type directions or instructions like "south", "east", "north" or "west" to explore the map. There are also secret commands (try "xyzzy"!). 
 
 making your own map
 -------------------
