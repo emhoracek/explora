@@ -34,11 +34,11 @@ version:
 library
     build-depends:
         base ==4.*
-      , containers, parsec
+      , containers, parsec, directory
     default-language:
         Haskell2010
     exposed-modules:
-        Actions, Dictionary, DIYGraph, Game, Graph, Input, Items, Loop, Parse, Places, Player, Properties, Response
+        Actions, Dictionary, DIYGraph, Game, Graph, Init, Input, Items, Loop, Parse, Places, Player, Properties, Response
     ghc-options:
         -Wall
     ghc-prof-options:
@@ -49,7 +49,7 @@ library
 
 executable explora
     build-depends:
-        base, containers, parsec, hspec, QuickCheck, explora
+        base, containers, parsec, hspec, QuickCheck, explora, directory
     default-language:
         Haskell2010
     ghc-prof-options:
@@ -63,7 +63,7 @@ executable explora
 test-suite tests
     build-depends:
         base
-      , containers
+      , containers, directory
       , explora
       , parsec
       , hspec ==2.*

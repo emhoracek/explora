@@ -20,7 +20,6 @@ instance Inv Place where
     removeItem i p = p { inventory = filter (/= i) (inventory p)}
     addItem i p = p { inventory = i : inventory p }
 
-
 defaultPlace :: Place
 defaultPlace = Place 1 "A place" "Description of the place." [] [] [defaultExit]
 
