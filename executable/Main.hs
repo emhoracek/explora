@@ -12,9 +12,10 @@ exampleFile = "games/example.exp"
 main :: IO ()
 main = do
     putStrLn "What game file would you like to play?"
-    putStrLn "Available games: "
-    games <- listGames ""
+    putStrLn "Games in the current directory:"
+    games <- listGames "."
     mapM_ putStrLn games
+    putStrLn "Or just press enter to play the game at games/example.exp"
     file <- getLine
     f <- if file == "" then readFile exampleFile else readFile file
     -- TODO: what if the file isn't there?
