@@ -64,7 +64,7 @@ parseItem = do
     desc <- validPlaceString
     return [Item { itemName = string,
                    itemInfo = fromList [("description", desc)],
-                   itemActions = [[]] }]
+                   itemActions = [] }]
 
 listOfItems :: Parser [Item]
 listOfItems = option [] $ try parseItem
