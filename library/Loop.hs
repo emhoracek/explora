@@ -33,7 +33,7 @@ loop game = do
         then loop nextWorld 
         else return ()
 
--- This SUCKS
+-- TODO: This SUCKS
 entryAction :: String -> Game -> IO Game
 entryAction string game = do
     let input = validateInput string (dictionary game) 

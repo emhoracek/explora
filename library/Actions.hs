@@ -20,7 +20,7 @@ validateAction input game = case input of
     Left response   -> response
     Right goodInput -> tryAction goodInput game 
 
--- Ick
+-- TODO: fix this 
 tryAction :: Input -> Game -> Response 
 tryAction ("go", direction) game = go direction game
 tryAction ("kill", "player") game = Okay game { player = killPlayer (player game) } "You have died."
@@ -79,9 +79,11 @@ examine string game =
         Just x -> Okay game (maybeInfo "description" x)
         Nothing -> Impossible $ "You don't see any \"" ++ string ++ "\" here."
 
+-- | Change the player.
 changeGamePlayer :: (Player -> Player) -> Game -> Game
 changeGamePlayer f g = g { player = f (player g) }
 
+-- | Change the graph.
 changeGameGraph :: (Place -> Place) -> Game -> Game
 changeGameGraph f g = g { mapGraph = newGraph }
     where
@@ -98,6 +100,7 @@ takeItem string game =
         changeGame i = changeGamePlayer (addItem i) 
                        $ changeGameGraph (removeItem i) game
 
+-- | Game verb: Drop an item into the current location.
 dropItem :: String -> Game -> Response
 dropItem string game = 
     case findItem string (player game) of

@@ -27,7 +27,8 @@ toDirection input dict =
        Just dir -> Right ("go", dir) 
        Nothing  -> Left (BadInput input)
 
--- | If string is valid input, change it to a verb, noun pain, otherwise the
+-- TODO: this really sucks
+-- | If string is valid input, change it to a verb, noun pair, otherwise the
 -- response is a "BadInput" or "NoInput" error.
 validateInput :: String -> Dictionary -> Either Response Input
 validateInput string dict

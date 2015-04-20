@@ -2,6 +2,9 @@ module Response where
 
 import Game (Game(..))
 
+
+-- TODO Consider adding the Current Response? to the Game State
+--
 -- These are all the responses the player can get for their input.
 -- "Okay Action" means it's okay to take that action.
 data Response = NoInput

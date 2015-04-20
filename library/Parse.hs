@@ -11,6 +11,7 @@ import Places
 import Dictionary
 import Items
 
+-- | Turns an Exit into a list of definitions.
 listOfDefinitions :: Exit -> [(Direction, [UserInput])]
 listOfDefinitions (Exit dir syn _) = [(dir, syn)]
 
@@ -67,12 +68,9 @@ parseItem = do
 listOfItems :: Parser [Item]
 listOfItems = option [] $ try parseItem
 
--- what about multiword synonyms? are those okay?
+-- TODO: This doesn't work with multiword synonyms? are those okay?
 validExitString :: Parser String
 validExitString = many (noneOf " ,:()\n")
-
-listOfExits :: Parser [Exit]
-listOfExits = option [] $ try $ parseExit `sepBy` string ", "
 
 parseSynonyms :: Parser [String]
 parseSynonyms = do
@@ -80,6 +78,9 @@ parseSynonyms = do
     synonyms <- validExitString `sepBy` string ", " 
     char ')'
     return synonyms
+
+listOfExits :: Parser [Exit]
+listOfExits = option [] $ try $ parseExit `sepBy` string ", "
 
 parseExit :: Parser Exit
 parseExit = do
@@ -100,10 +101,10 @@ parseExits = parse listOfExits "Exit error: "
 parsePlaces :: String -> Either ParseError [Place]
 parsePlaces = parse listOfPlaces "Map error: "
 
+parseItemsTest :: String -> Either ParseError [Item]
+parseItemsTest = parse listOfItems "Item error:"
+
 parseDictionary :: String -> Either ParseError Dictionary
 parseDictionary file = case parsePlaces file of 
     Left x -> Left x
     Right x -> Right $ toDictionary x
-
-parseItemsTest :: String -> Either ParseError [Item]
-parseItemsTest = parse listOfItems "oops"
