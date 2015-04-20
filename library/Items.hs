@@ -11,7 +11,6 @@ data Item = Item { itemName :: String,
 instance Show Item where
     show (Item name info actions) = name
 
-
 class Inv a where
     findItem :: String -> a -> Maybe Item
     removeItem :: Item -> a -> a 

@@ -8,6 +8,8 @@ type Verb = String
 type Noun = String
 type Input = (Verb, Noun)
 
+-- TODO: Fix this, it really sucks (see Action library).
+
 -- | This strips spaces from the beginning and end but not the middle
 stripExtraSpaces :: String -> String
 stripExtraSpaces string
@@ -27,7 +29,6 @@ toDirection input dict =
        Just dir -> Right ("go", dir) 
        Nothing  -> Left (BadInput input)
 
--- TODO: this really sucks
 -- | If string is valid input, change it to a verb, noun pair, otherwise the
 -- response is a "BadInput" or "NoInput" error.
 validateInput :: String -> Dictionary -> Either Response Input

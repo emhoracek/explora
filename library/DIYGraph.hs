@@ -2,8 +2,6 @@
 -- engine needs (representing a map). Based on Erwig's inductive graph.
 module DIYGraph where
 
--- copying fgl
-
 -- | A unique ID for each node 
 type NodeID = Int
 -- | A node is a node ID and a "label" 
@@ -108,7 +106,9 @@ insertEdges edges graph = foldl (flip insertEdge) graph edges
 fromLists :: [Node a] -> [Edge b] -> Graph a b
 fromLists nodes edges = insertEdges edges $ insertNodes nodes EmptyGraph
 
--- | Tries to find the context of a node. It should really be a Maybe.
+-- Everything below this point should be a Maybe, really. Oops.
+
+-- | Tries to find the context of a node.
 nodeToContext :: NodeID -> Graph a b -> Context a b
 nodeToContext _ EmptyGraph = error "Node not in graph!!!"
 nodeToContext node (context@(_, n,_) :&: graph)
@@ -119,12 +119,12 @@ nodeToContext node (context@(_, n,_) :&: graph)
 outLinks :: Context a b-> Links b
 outLinks (_, _, x) = x
 
--- What was my motivation for this??
+-- | Finds all the edges from a given node.
 linksToEdges :: NodeID -> Graph a b -> [Edge b]
 linksToEdges n graph = map (\(label, node) -> (n, node, label)) 
                         (outLinks $ nodeToContext n graph)
 
--- Seems to be same as the above but in what feels like the wrong order?
+-- | Also finds all the edges from a given node. (Um, oops.)
 out :: Graph a b -> NodeID -> [Edge b]
 out graph n = linksToEdges n graph
 
@@ -134,7 +134,6 @@ nodes EmptyGraph = []
 nodes ((_, (id, _),_) :&: graph) = id : nodes graph
 
 -- | Gets the label of a node in a graph by its ID.
--- Why graph then node?
 label :: Graph a b -> NodeID -> a
 label graph n = label context
     where context = nodeToContext n graph

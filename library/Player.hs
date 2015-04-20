@@ -17,9 +17,7 @@ instance Inv Player where
     removeItem i p= p { playerInventory = filter (/= i) (playerInventory p)}
     addItem i p= p { playerInventory = i : playerInventory p }
 
-
-
--- Player starts with no inventory at first place in graph.
+-- | Player starts with no inventory at first place in graph.
 makePlayer :: Graph Place Direction -> Player
 makePlayer graph = Player { currentPlace = head $ nodes graph,
                             playerInventory = [],
@@ -27,14 +25,17 @@ makePlayer graph = Player { currentPlace = head $ nodes graph,
                                           ("Alive", "True"), ("Won", "False"), 
                                           ("score", "0")]}
 
+-- | Changes the player in some way.
 changePlayer :: String -> String -> Player -> Player
 changePlayer property value player =
         let f = adjust (const value) property in
         player { playerInfo = f $ playerInfo player }
 
+-- | Kills the player.
 killPlayer :: Player -> Player
 killPlayer =  changePlayer "Alive" "False"
 
+-- | Moves the player.
 movePlayer :: Int -> Player ->  Player
 movePlayer node player = player { currentPlace = node }
 

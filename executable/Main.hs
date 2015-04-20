@@ -13,7 +13,7 @@ main :: IO ()
 main = do
     putStrLn "What game file would you like to play?"
     putStrLn "Available games: "
-    games <- listGames "games"
+    games <- listGames ""
     mapM_ putStrLn games
     file <- getLine
     f <- if file == "" then readFile exampleFile else readFile file

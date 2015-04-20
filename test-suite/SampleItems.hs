@@ -26,8 +26,7 @@ itemsDefinitions :: Dictionary
 itemsDefinitions = Map.fromList [ ("s", "South"), ("n", "North"), ("south", "South"), ("north", "North") ]
 
 hairDye = Item { itemName = "box of hair dye",
-                 itemInfo = fromList [("description", "You can change the color of your hair with this.")],
-                 itemActions = [] }
+                 itemInfo = fromList [("description", "You can change the color of your hair with this.")]}
 
 itemsPlaces = [ Place 1 "A place" "description" [hairDye] [] [Exit "South" ["s"] 2] ,
                  Place 2 "A place" "description" [] [] [Exit "North" ["n"] 1] ]

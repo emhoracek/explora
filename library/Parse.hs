@@ -11,8 +11,9 @@ import Places
 import Dictionary
 import Items
 
--- | Turns an Exit into a list of definitions.
-listOfDefinitions :: Exit -> [(Direction, [UserInput])]
+-- | This is all pretty self-explanitory.
+
+listOfDefinitions :: Exit -> [(Direction, [String])]
 listOfDefinitions (Exit dir syn _) = [(dir, syn)]
 
 listOfPlaces :: Parser [Place]

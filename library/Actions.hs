@@ -14,13 +14,16 @@ import Data.Map (lookup)
 import Data.List (find, delete, intercalate)
 import Data.Maybe (fromMaybe)
 
+
+-- TODO: fix this whole mess. Per R0ml: Actions are actions, i.e. functions. Lookup reification.
+
 -- | Checks if it's possible to verb that noun.
 validateAction :: Either Response Input -> Game -> Response
 validateAction input game = case input of
     Left response   -> response
     Right goodInput -> tryAction goodInput game 
 
--- TODO: fix this 
+-- | Takes a verb, noun input and find the appropriate response.
 tryAction :: Input -> Game -> Response 
 tryAction ("go", direction) game = go direction game
 tryAction ("kill", "player") game = Okay game { player = killPlayer (player game) } "You have died."

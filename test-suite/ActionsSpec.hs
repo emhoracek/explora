@@ -55,7 +55,7 @@ spec = do
     describe "look" $
         it "give a description of the place" $
             look sampleGame `shouldBe`
-                "A place\ndescription\n"
+                "A place\ndescription"
 
     describe "examine" $ do
         context "self" $

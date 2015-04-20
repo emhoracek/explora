@@ -9,9 +9,6 @@ import Player
 
 import Text.ParserCombinators.Parsec.Error
 
--- change Dictionary to functions
-
-
 -- TODO -- change mapGraph to places, game to gameState
 data Game = Game { player :: Player,
                    mapGraph :: Graph Place String,
