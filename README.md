@@ -70,23 +70,23 @@ I've tried really hard to document the code and make it clear and easy to unders
 
 The code is organized like this:
 
-executable -- the main executable.
-library -- all the modules 
-    * Actions -- Anything related to actions the player can take in the game
-    * Dictionary -- The words the games can understand
-    * DIYGraph -- This is a little inductive functional graph library, based on fgl (here) and this blog post (here)
-    * Game -- The game data type
-    * Graph -- The game's graph data structure
-    * Init -- The initialization of the game.
-    * Input -- How the player's input is understand as a verb and subject
-    * Items -- The item data structure
-    * Loop -- The main game loop
-    * Parse -- Parses the game file
-    * Places -- The place data type
-    * Player -- The player data type
-    * Properties -- Functions the change the properties of items
-    * Response -- The response data type
-test-suite -- most of the libraries have tests with the name of the library plus "Spec". So the tests for Items are in ItemsSpec. There's also Spec.hs, which is what automatically finds all those tests, and two modules full of small samples (tiny "game files" and "games" that are easier to test).
+* executable -- the main executable.
+* library -- all the modules 
+  * Actions -- Anything related to actions the player can take in the game
+  * Dictionary -- The words the games can understand
+  * DIYGraph -- This is a little inductive functional graph library, based on fgl (here) and this blog post (here)
+  * Game -- The game data type
+  * Graph -- The game's graph data structure
+  * Init -- The initialization of the game.
+  * Input -- How the player's input is understand as a verb and subject
+  * Items -- The item data structure
+  * Loop -- The main game loop
+  * Parse -- Parses the game file
+  * Places -- The place data type
+  * Player -- The player data type
+  * Properties -- Functions the change the properties of items
+  * Response -- The response data type
+* test-suite -- most of the libraries have tests with the name of the library plus "Spec". So the tests for Items are in ItemsSpec. There's also Spec.hs, which is what automatically finds all those tests, and two modules full of small samples (tiny "game files" and "games" that are easier to test).
 
 To install with tests,
 ```(sh)
