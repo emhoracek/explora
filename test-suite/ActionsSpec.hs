@@ -46,7 +46,8 @@ spec = do
     describe "go" $ do
         context "good direction" $
             it "returns okay with a good world" $
-                pending
+                go "South" sampleGame `shouldBe`
+                    Okay sampleGameSouth ""
         context "impossible direction" $
             it "says that's impossible" $
                 go "to Albequerque" sampleGame `shouldBe`

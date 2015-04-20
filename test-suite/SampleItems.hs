@@ -61,10 +61,10 @@ itemsGameChanged =
           mapGraph = itemsGraphChanged, 
           dictionary = itemsDefinitions }
 
-itemsGameWithAddedPink :: Game
-itemsGameWithAddedPink =
-    Game { player = Player { currentPlace = 1,
+playerWithBrownHair = Player { currentPlace = 1,
                              playerInventory = [],
-                             playerInfo = fromList [("Alive", "True"), ("Won", "False"),("description","You have pink hair now."),("score","0"), ("hair color", "pink")]},
-           mapGraph = itemsGraphChanged,
-           dictionary = itemsDefinitions }
+                             playerInfo = fromList [("Alive", "True"), ("Won", "False"),("description","As lovely as ever."),("score","0"), ("hair color", "brown")]}
+
+playerWithPinkHair = Player { currentPlace = 1,
+                             playerInventory = [],
+                             playerInfo = fromList [("Alive", "True"), ("Won", "False"),("description","As lovely as ever."),("score","0"), ("hair color", "pink")]}

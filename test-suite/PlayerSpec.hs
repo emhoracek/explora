@@ -3,6 +3,7 @@ module PlayerSpec (spec) where
 import Test.Hspec
 import Player
 import Samples
+import SampleItems
 import Data.Map (fromList)
 
 spec = do 
@@ -11,8 +12,9 @@ spec = do
             makePlayer sampleGraph `shouldBe` samplePlayer
 
     describe "changePlayer" $
-        it "changes one thing about the player" $
-            pendingWith "laziness"
+        it "changes properties of the player" $
+            changePlayer "hair color" "pink" playerWithBrownHair
+                `shouldBe` playerWithPinkHair
 
     describe "killPlayer" $
         it "kills the player" $

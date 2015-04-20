@@ -74,3 +74,8 @@ sampleGame :: Game
 sampleGame = Game { player = samplePlayer, 
                     mapGraph = sampleGraph,
                     dictionary = sampleDefinitions }
+
+sampleGameSouth :: Game
+sampleGameSouth = Game { player = Player {currentPlace = 2, playerInventory = [], playerInfo = fromList [("Alive","True"),("Won","False"),("description","As lovely as ever."),("score","0")]}, 
+                         mapGraph = sampleGraph, 
+                         dictionary = sampleDefinitions }
