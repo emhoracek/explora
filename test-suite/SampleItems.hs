@@ -1,7 +1,6 @@
 module SampleItems where
 
 import Test.Hspec
-import Test.QuickCheck
 import Data.Map (Map, fromList)
 import qualified Data.Map as Map
 import Places
@@ -16,7 +15,7 @@ import Text.ParserCombinators.Parsec.Error(ParseError(..), Message, newErrorMess
 import Samples 
 import Text.Parsec.Pos(SourcePos, initialPos)
 
-itemString = "\n# item: The description of the item."
+itemString = "\n# item: The description of the item.\n"
 
 sampleInventory = [ Item { itemName = "item",
                            itemInfo = fromList [("description", "The description of the item.")],
@@ -26,7 +25,8 @@ itemsDefinitions :: Dictionary
 itemsDefinitions = Map.fromList [ ("s", "South"), ("n", "North"), ("south", "South"), ("north", "North") ]
 
 hairDye = Item { itemName = "box of hair dye",
-                 itemInfo = fromList [("description", "You can change the color of your hair with this.")]}
+                 itemInfo = fromList [("description", "You can change the color of your hair with this.")],
+                 itemActions = [] }
 
 itemsPlaces = [ Place 1 "A place" "description" [hairDye] [] [Exit "South" ["s"] 2] ,
                  Place 2 "A place" "description" [] [] [Exit "North" ["n"] 1] ]
@@ -57,7 +57,7 @@ itemsGameChanged =
                            playerInventory = [Item {itemName = "box of hair dye", 
                                                 itemInfo = fromList [("description","You can change the color of your hair with this.")],
                                                 itemActions = []}], 
-                           playerInfo = fromList [("Alive","True"),("Won","False"),("description","As lovely as ever."),("score","0"), ("hair color", "brown")]}, 
+                           playerInfo = fromList [("Alive","True"),("Won","False"),("description","As lovely as ever."),("score","0")]}, 
           mapGraph = itemsGraphChanged, 
           dictionary = itemsDefinitions }
 

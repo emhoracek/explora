@@ -1,7 +1,6 @@
 module Samples where
 
 import Test.Hspec
-import Test.QuickCheck
 import Data.Map (Map, fromList)
 import qualified Data.Map as Map
 import Places
